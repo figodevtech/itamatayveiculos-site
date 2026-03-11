@@ -57,7 +57,7 @@ export const vehicles: Vehicle[] = [
     ],
     city: "João Pessoa",
     state: "PB",
-    seller: "Alan Car",
+    seller: "Itamatay Veículos",
     sellerType: "loja",
     features: [
       "Sem Sinistro",
@@ -106,7 +106,7 @@ export const vehicles: Vehicle[] = [
     ],
     city: "João Pessoa",
     state: "PB",
-    seller: "Alan Car",
+    seller: "Itamatay Veículos",
     sellerType: "loja",
     features: [
       "Veículo com passagem em leilão",
@@ -161,7 +161,7 @@ export const vehicles: Vehicle[] = [
     ],
     city: "João Pessoa",
     state: "PB",
-    seller: "Alan Car",
+    seller: "Itamatay Veículos",
     sellerType: "loja",
     features: [
       "Garantia de motor e câmbio",
@@ -216,7 +216,7 @@ export const vehicles: Vehicle[] = [
     ],
     city: "João Pessoa",
     state: "PB",
-    seller: "Alan Car",
+    seller: "Itamatay Veículos",
     sellerType: "loja",
     features: [
       "Financiamento junto ao banco",
@@ -277,7 +277,7 @@ export const vehicles: Vehicle[] = [
     ],
     city: "Rio de Janeiro",
     state: "RJ",
-    seller: "Alan Car",
+    seller: "Itamatay Veículos",
     sellerType: "loja",
     features: [
       "Veículo com passagem em leilão!",

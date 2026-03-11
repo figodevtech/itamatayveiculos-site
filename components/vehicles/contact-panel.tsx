@@ -74,7 +74,7 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
           <div className="mt-4 flex items-center gap-2 rounded-lg bg-secondary p-3">
             <Shield className="h-5 w-5 shrink-0 text-primary" />
             <span className="text-xs text-muted-foreground">
-              Negociacao protegida pelo Alan Car. Compre com seguranca.
+              Negociacao protegida pela Itamatay Veículos. Compre com seguranca.
             </span>
           </div>
         </CardContent>

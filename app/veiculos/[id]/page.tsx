@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: VehicleDetailPageProps) {
   const vehicle = getVehicleById(id)
   if (!vehicle) return { title: "Veiculo nao encontrado" }
   return {
-    title: `${vehicle.brand} ${vehicle.model} ${vehicle.version} - AlanCar`,
+    title: `${vehicle.brand} ${vehicle.model} ${vehicle.version} - Itamatay Veículos`,
     description: vehicle.description,
   }
 }

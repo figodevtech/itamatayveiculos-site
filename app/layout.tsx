@@ -7,7 +7,7 @@ const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const _spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });
 
 export const metadata: Metadata = {
-  title: 'Alan Car',
+  title: 'Itamatay Veículos',
   description: 'O maior marketplace de veiculos do Brasil. Encontre carros com os melhores precos.',
   generator: 'FIGO Softwares',
   icons: {

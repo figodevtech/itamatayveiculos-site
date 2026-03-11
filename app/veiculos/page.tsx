@@ -4,7 +4,7 @@ import { Footer } from "@/components/footer"
 import { VehicleListContent } from "@/components/vehicles/vehicle-list-content"
 
 export const metadata = {
-  title: "Alan Car",
+  title: "Itamatay Veículos",
   description:
     "Encontre carros com os melhores precos. Filtre por marca, modelo, ano e muito mais.",
 }

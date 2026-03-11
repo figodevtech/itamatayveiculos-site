@@ -9,7 +9,7 @@ export function Footer() {
           <div>
             <Link href="/" className="mb-4 flex items-center gap-2">
 
-              <span className="font-mono text-lg font-bold">Alan Car</span>
+              <span className="font-mono text-lg font-bold">Itamatay Veículos</span>
             </Link>
             <p className="text-sm leading-relaxed text-primary-foreground/70">
               O maior marketplace de veiculos do Brasil. Encontre o carro dos
@@ -141,7 +141,7 @@ export function Footer() {
 
         <div className="mt-10 border-t border-primary-foreground/10 pt-6">
           <p className="text-center text-xs text-primary-foreground/50">
-            2026 Alan Car. Todos os direitos reservados.
+            2026 Itamatay Veículos. Todos os direitos reservados.
           </p>
           <p className="text-center text-xs text-primary-foreground/50">
             Powered By FIGO</p>

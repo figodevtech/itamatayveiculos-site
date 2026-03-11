@@ -16,18 +16,18 @@ import { cn } from "@/lib/utils"
 const bannerData = [
   {
     id: 1,
-    image: "/images/banners/qualidade&precojusto.png",
-    alt: "qualidade&precojusto",
+    image: "/images/banners/qualidade.png",
+    alt: "qualidade",
   },
   {
     id: 2,
-    image: "/images/banners/carrosdeleilao.png",
-    alt: "carrosdeleilao",
+    image: "/images/banners/feirao.png",
+    alt: "feirao",
   },
   {
     id: 3,
-    image: "/images/banners/diadamulher.png",
-    alt: "diadamulher",
+    image: "/images/banners/banner2.png",
+    alt: "banner1",
   },
 
 

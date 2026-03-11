@@ -23,15 +23,15 @@ export function Header() {
             <Menu className="h-6 w-6 text-black" />
           )}
         </button>
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 flex-row">
           {/* <Car className="h-7 w-7" /> */}
           <Image
-            height={60}
-            width={150}
-            src="/images/logos/logo_alan_horizontal.png"
+            height={50}
+            width={50}
+            src="/images/logos/itamatay-logo.png"
             alt="logo"
           ></Image>
-
+          <span className="text-xl font-bold">Itamatay</span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
@@ -87,7 +87,7 @@ export function Header() {
         </div>
 
       </div>
-        
+
 
       {mobileMenuOpen && (
         <div className="border-t border-black/10 px-4 pb-4 md:hidden">
@@ -120,9 +120,9 @@ export function Header() {
                 className="w-full font-semibold"
                 asChild
               >
-                 <Link
-              target="_blank"
-              href="
+                <Link
+                  target="_blank"
+                  href="
             https://wa.me/send/?phone=5583982209260&text=Olá,%20gostaria%20de%20anunciar%20um%20veículo%20no%20seu%20site.%20
             ">Anunciar</Link>
               </Button>
