@@ -113,7 +113,7 @@ export function Footer() {
               <li>
                 <Link
                   target="_blank"
-                  href="https://wa.me/send/?phone=5583982209260&text&type=phone_number&app_absent=0&utm_source=ig"
+                  href="https://wa.me/send/?phone=5583981415579&text&type=phone_number&app_absent=0&utm_source=ig"
                   className="text-sm text-primary-foreground/70 transition-colors hover:text-primary-foreground"
                 >
                   Contato

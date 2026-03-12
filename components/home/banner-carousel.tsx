@@ -21,13 +21,13 @@ const bannerData = [
   },
   {
     id: 2,
-    image: "/images/banners/feirao.png",
+    image: "/images/banners/pneus2.png",
     alt: "feirao",
   },
   {
     id: 3,
-    image: "/images/banners/banner2.png",
-    alt: "banner1",
+    image: "/images/banners/moto.png",
+    alt: "moto",
   },
 
 

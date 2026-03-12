@@ -43,9 +43,11 @@ export function HeroSearch() {
               <SelectTrigger className="w-full bg-secondary text-secondary-foreground">
                 <SelectValue placeholder="Todas as marcas" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 {brands.map((b) => (
-                  <SelectItem key={b} value={b}>
+                  <SelectItem
+                    className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                    key={b} value={b}>
                     {b}
                   </SelectItem>
                 ))}
@@ -62,11 +64,31 @@ export function HeroSearch() {
               <SelectTrigger className="w-full bg-secondary text-secondary-foreground">
                 <SelectValue placeholder="Qualquer preco" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="0-80000">Ate R$ 80.000</SelectItem>
-                <SelectItem value="80000-120000">R$ 80.000 - R$ 120.000</SelectItem>
-                <SelectItem value="120000-200000">R$ 120.000 - R$ 200.000</SelectItem>
-                <SelectItem value="200000-999999">Acima de R$ 200.000</SelectItem>
+              <SelectContent position="popper">
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="0-80000"
+                >
+                  Ate R$ 80.000
+                </SelectItem>
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="80000-120000"
+                >
+                  R$ 80.000 - R$ 120.000
+                </SelectItem>
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="120000-200000"
+                >
+                  R$ 120.000 - R$ 200.000
+                </SelectItem>
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="200000-999999"
+                >
+                  Acima de R$ 200.000
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -80,18 +102,38 @@ export function HeroSearch() {
               <SelectTrigger className="w-full bg-secondary text-secondary-foreground">
                 <SelectValue placeholder="Qualquer ano" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="2025">2025</SelectItem>
-                <SelectItem value="2024">2024</SelectItem>
-                <SelectItem value="2023">2023</SelectItem>
-                <SelectItem value="2022">2022</SelectItem>
+              <SelectContent position="popper">
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="2025"
+                >
+                  2025
+                </SelectItem>
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="2024"
+                >
+                  2024
+                </SelectItem>
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="2023"
+                >
+                  2023
+                </SelectItem>
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="2022"
+                >
+                  2022
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <Button
             onClick={handleSearch}
-            className="bg-accent text-accent-foreground hover:bg-accent/90 md:px-8"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 md:px-8"
             size="lg"
           >
             <Search className="mr-2 h-4 w-4" />
