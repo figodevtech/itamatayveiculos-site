@@ -8,9 +8,10 @@ import { formatPrice, formatMileage } from "@/lib/vehicles"
 
 interface VehicleCardProps {
   vehicle: Vehicle
+  priority?: boolean
 }
 
-export function VehicleCard({ vehicle }: VehicleCardProps) {
+export function VehicleCard({ vehicle, priority }: VehicleCardProps) {
   return (
     <Link href={`/veiculos/${vehicle.id}`}>
       <Card className="group overflow-hidden border-border bg-card transition-all hover:shadow-lg h-full">
@@ -21,6 +22,7 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={priority}
           />
           {vehicle.isNew && (
             <Badge className="absolute left-3 top-3 bg-accent text-accent-foreground">

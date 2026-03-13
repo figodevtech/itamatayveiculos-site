@@ -119,6 +119,8 @@ export function BannerCarousel() {
                   fill
                   className="object-cover object-center"
                   priority={item.id === 1}
+                  sizes="100vw"
+                  quality={90}
                 />
               </div>
             </CarouselItem>

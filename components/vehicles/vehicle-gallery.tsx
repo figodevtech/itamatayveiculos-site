@@ -40,14 +40,15 @@ export function VehicleGallery({ images, alt }: VehicleGalleryProps) {
   return (
     <div>
 
-      <div className="group relative aspect-[16/10] overflow-hidden rounded-xl bg-muted">
+      <div className="group relative aspect-16/10 overflow-hidden rounded-xl bg-muted">
         <Image
           src={images[currentIndex]}
           alt={`${alt} - Foto ${currentIndex + 1}`}
           fill
           className="object-cover"
-          priority
-          sizes="(max-width: 768px) 100vw, 60vw"
+          priority={currentIndex === 0}
+          sizes="(max-width: 768px) 100vw, 864px"
+          quality={85}
         />
 
         {images.length > 1 && (
