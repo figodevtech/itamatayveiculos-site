@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
-import { useSearchParams } from "next/navigation"
+import { useState, useCallback } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { SlidersHorizontal, Grid3X3, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -13,84 +13,63 @@ import {
 } from "@/components/ui/select"
 import { VehicleCard } from "@/components/vehicle-card"
 import { FilterSidebar } from "@/components/vehicles/filter-sidebar"
-import { vehicles } from "@/lib/vehicles"
+import type { Vehicle } from "@/lib/vehicles"
 
-export function VehicleListContent() {
+interface VehicleListContentProps {
+  initialVehicles: Vehicle[]
+}
+
+export function VehicleListContent({ initialVehicles }: VehicleListContentProps) {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const [showFilters, setShowFilters] = useState(false)
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
 
-  const [filters, setFilters] = useState({
-    brand: searchParams.get("marca") || "",
+  const filters = {
+    brand: searchParams.get("marca") || "all",
     bodyType: searchParams.get("tipo") || "",
-    fuelType: "",
-    priceRange: [0, 400000] as [number, number],
-    yearMin: searchParams.get("ano") || "",
-    yearMax: "",
-    sortBy: "relevance",
-  })
+    fuelType: searchParams.get("combustivel") || "",
+    priceRange: [
+      Number(searchParams.get("precoMin")) || 0,
+      Number(searchParams.get("precoMax")) || 400000
+    ] as [number, number],
+    yearMin: searchParams.get("anoMin") || "any",
+    yearMax: searchParams.get("anoMax") || "any",
+    sortBy: searchParams.get("sortBy") || "relevance",
+  }
 
   const handleFilterChange = useCallback(
     (key: string, value: unknown) => {
-      setFilters((prev) => ({ ...prev, [key]: value }))
+      const params = new URLSearchParams(searchParams.toString())
+      
+      let newValue = value as string
+      if (key === 'priceRange') {
+        const range = value as [number, number];
+        params.set('precoMin', range[0].toString());
+        params.set('precoMax', range[1].toString());
+      } else {
+        const urlKey = 
+          key === 'brand' ? 'marca' :
+          key === 'bodyType' ? 'tipo' :
+          key === 'fuelType' ? 'combustivel' :
+          key === 'yearMin' ? 'anoMin' :
+          key === 'yearMax' ? 'anoMax' : key;
+          
+        if (value && value !== 'all' && value !== 'any') {
+          params.set(urlKey, newValue)
+        } else {
+          params.delete(urlKey)
+        }
+      }
+      
+      router.push(`/veiculos?${params.toString()}`, { scroll: false })
     },
-    []
+    [router, searchParams]
   )
 
   const handleClearFilters = useCallback(() => {
-    setFilters({
-      brand: "",
-      bodyType: "",
-      fuelType: "",
-      priceRange: [0, 400000],
-      yearMin: "",
-      yearMax: "",
-      sortBy: "relevance",
-    })
-  }, [])
-
-  const filteredVehicles = useMemo(() => {
-    let result = [...vehicles]
-
-    if (filters.brand && filters.brand !== "all") {
-      result = result.filter((v) => v.brand === filters.brand)
-    }
-    if (filters.bodyType) {
-      result = result.filter((v) => v.bodyType === filters.bodyType)
-    }
-    if (filters.fuelType) {
-      result = result.filter((v) => v.fuel === filters.fuelType)
-    }
-    if (filters.priceRange[0] > 0 || filters.priceRange[1] < 400000) {
-      result = result.filter(
-        (v) =>
-          v.price >= filters.priceRange[0] && v.price <= filters.priceRange[1]
-      )
-    }
-    if (filters.yearMin && filters.yearMin !== "any") {
-      result = result.filter((v) => v.year >= parseInt(filters.yearMin))
-    }
-    if (filters.yearMax && filters.yearMax !== "any") {
-      result = result.filter((v) => v.year <= parseInt(filters.yearMax))
-    }
-
-    switch (filters.sortBy) {
-      case "price-asc":
-        result.sort((a, b) => a.price - b.price)
-        break
-      case "price-desc":
-        result.sort((a, b) => b.price - a.price)
-        break
-      case "year-desc":
-        result.sort((a, b) => b.year - a.year)
-        break
-      case "mileage-asc":
-        result.sort((a, b) => (a.mileage ?? 0) - (b.mileage ?? 0))
-        break
-    }
-
-    return result
-  }, [filters])
+    router.push('/veiculos', { scroll: false })
+  }, [router])
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 lg:px-6 lg:py-8">
@@ -99,7 +78,7 @@ export function VehicleListContent() {
           Veiculos a venda
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          {filteredVehicles.length} veiculos encontrados
+          {initialVehicles.length} veiculos encontrados
         </p>
       </div>
 
@@ -164,7 +143,7 @@ export function VehicleListContent() {
               filters={filters}
               onFilterChange={handleFilterChange}
               onClearFilters={handleClearFilters}
-              resultCount={filteredVehicles.length}
+              resultCount={initialVehicles.length}
             />
           </div>
         </div>
@@ -182,7 +161,7 @@ export function VehicleListContent() {
                 onFilterChange={handleFilterChange}
                 onClearFilters={handleClearFilters}
                 onClose={() => setShowFilters(false)}
-                resultCount={filteredVehicles.length}
+                resultCount={initialVehicles.length}
               />
             </div>
           </div>
@@ -190,7 +169,7 @@ export function VehicleListContent() {
 
         {/* Vehicle grid */}
         <div className="flex-1">
-          {filteredVehicles.length > 0 ? (
+          {initialVehicles.length > 0 ? (
             <div
               className={
                 viewMode === "grid"
@@ -198,7 +177,7 @@ export function VehicleListContent() {
                   : "flex flex-col gap-4"
               }
             >
-              {filteredVehicles.map((vehicle) => (
+              {initialVehicles.map((vehicle) => (
                 <VehicleCard key={vehicle.id} vehicle={vehicle} />
               ))}
             </div>

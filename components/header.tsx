@@ -1,36 +1,22 @@
-"use client"
-
 import Link from "next/link"
-import { Car, Menu, X, User, Heart } from "lucide-react"
-import { useState } from "react"
+import { User, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { MobileMenu } from "./header/mobile-menu"
 
 export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
   return (
-    <header className="sticky top-0 z-50 bg-white  text-primary-foreground shadow-md">
+    <header className="sticky top-0 z-50 bg-white text-primary-foreground shadow-md">
       <div className="mx-auto flex items-center relative justify-center md:justify-between px-6 py-3.5 lg:px-10">
-        <button
-          className="md:hidden absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-md"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
-        >
-          {mobileMenuOpen ? (
-            <X className="h-6 w-6 text-black" />
-          ) : (
-            <Menu className="h-6 w-6 text-black" />
-          )}
-        </button>
+        <MobileMenu />
+        
         <Link href="/" className="flex items-center gap-2 flex-row">
-          {/* <Car className="h-7 w-7" /> */}
           <Image
             height={50}
             width={50}
             src="/images/logos/itamatay-logo.png"
             alt="logo"
-          ></Image>
+          />
           <span className="text-xl font-bold text-primary">Itamatay</span>
         </Link>
 
@@ -42,13 +28,13 @@ export function Header() {
             Comprar
           </Link>
           <Link
-            href=""
+            href="/veiculos"
             className="text-sm font-medium text-black/80 transition-colors hover:text-black"
           >
             Vender
           </Link>
           <Link
-            href=""
+            href="/veiculos"
             className="text-sm font-medium text-black/80 transition-colors hover:text-black"
           >
             Financiamento
@@ -80,56 +66,13 @@ export function Header() {
           >
             <Link
               target="_blank"
-              href="
-            https://api.whatsapp.com/send?phone=5583981415579&text=Olá,%20gostaria%20de%20anunciar%20um%20veículo%20no%20seu%20site.%20
-            ">Anunciar</Link>
+              href="https://api.whatsapp.com/send?phone=5583981415579&text=Olá,%20gostaria%20de%20anunciar%20um%20veículo%20no%20seu%20site.%20"
+            >
+              Anunciar
+            </Link>
           </Button>
         </div>
-
       </div>
-
-
-      {mobileMenuOpen && (
-        <div className="border-t border-black/10 px-4 pb-4 md:hidden">
-          <nav className="flex flex-col gap-3 pt-3">
-            <Link
-              href="/veiculos"
-              className="text-sm font-medium text-black/80 transition-colors hover:text-black"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Comprar
-            </Link>
-            <Link
-              href="/veiculos"
-              className="text-sm font-medium text-black/80 transition-colors hover:text-black"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Vender
-            </Link>
-            <Link
-              href="/veiculos"
-              className="text-sm font-medium text-black/80 transition-colors hover:text-black"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Financiamento
-            </Link>
-            <div className="flex items-center gap-3 pt-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                className="w-full font-semibold"
-                asChild
-              >
-                <Link
-                  target="_blank"
-                  href="
-            https://api.whatsapp.com/send?phone=5583981415579&text=Olá,%20gostaria%20de%20anunciar%20um%20veículo%20no%20seu%20site.%20
-            ">Anunciar</Link>
-              </Button>
-            </div>
-          </nav>
-        </div>
-      )}
     </header>
   )
 }
