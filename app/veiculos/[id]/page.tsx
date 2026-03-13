@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { AIDescriptionBox } from "@/components/vehicles/ai-description";
 
 interface VehicleDetailPageProps {
   params: Promise<{ id: string }>;
@@ -266,6 +267,9 @@ export default async function VehicleDetailPage({
                     </p>
                   </CardContent>
                 </Card>
+                {vehicle.enableAiDescription && (
+                  <AIDescriptionBox text={vehicle.aiDescription} />
+                )}
 
                 {/* Features */}
                 <Card className="border-border bg-card">

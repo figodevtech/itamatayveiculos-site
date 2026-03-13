@@ -1,31 +1,32 @@
 export interface Vehicle {
-  id: string
-  brand: string
-  model: string
-  version: string
-  year: number
-  yearModel: number
-  price: number
-  fipe?: number
-  mileage?: number
-  fuel: string
-  transmission: string
-  color: string
-  doors: number
-  bodyType: string
-  image: string
-  images: string[]
-  city: string
-  state: string
-  seller: string
-  sellerType: "concessionaria" | "loja" | "particular"
-  features: string[]
-  description: string
-  engineSize?: string
-  horsepower?: number
-  isNew?: boolean
-  message?: string
-
+  id: string;
+  brand: string;
+  model: string;
+  version: string;
+  year: number;
+  yearModel: number;
+  price: number;
+  fipe?: number;
+  mileage?: number;
+  fuel: string;
+  transmission: string;
+  color: string;
+  doors: number;
+  bodyType: string;
+  image: string;
+  images: string[];
+  city: string;
+  state: string;
+  seller: string;
+  sellerType: "concessionaria" | "loja" | "particular";
+  features: string[];
+  description: string;
+  enableAiDescription?: boolean;
+  aiDescription?: string;
+  engineSize?: string;
+  horsepower?: number;
+  isNew?: boolean;
+  message?: string;
 }
 
 export const vehicles: Vehicle[] = [
@@ -79,9 +80,13 @@ export const vehicles: Vehicle[] = [
     ],
     description:
       "De única dona, com pneus novos, alongador de caçamba que chega a destravar um espaço a mais, ultrapassando seus 683 litros, suspensão traseira multilink, e os itens como ar-condicionado, direção eletro-hidráulica, vidros/travas elétricas e som com Bluetooth, tornam a picape ainda mais especial, disponível hoje no pátio, acompanha chave reserva e manual do proprietário !",
-    // horsepower: 177,
+    enableAiDescription: true,
+    aiDescription:
+      "Uma curiosidade interessante é que o Renault Oroch ajudou a popularizar no Brasil o conceito de picape intermediária, unindo o conforto de um SUV com a versatilidade de uma caçamba. O Renault Oroch Expression 1.6 2022 segue essa proposta ao oferecer cabine espaçosa para cinco ocupantes, boa altura do solo e praticidade para o dia a dia, sendo uma opção equilibrada para quem precisa de um veículo confortável para a família, mas também funcional para o trabalho",
     isNew: false,
-    message: "Olá,%20me%20interessei%20pelo%20Renault%20Oroch%20Expression%201.6%20-%202022/2022"
+    // horsepower: 177,
+    message:
+      "Olá,%20me%20interessei%20pelo%20Renault%20Oroch%20Expression%201.6%20-%202022/2022",
   },
   {
     id: "2",
@@ -138,9 +143,13 @@ export const vehicles: Vehicle[] = [
     ],
     description:
       "A Fiat é marcada por muitos modelos de sucesso, e sim, entre eles o Uno é o mais duradouro no mercado brasileiro ! Esse em específico entra no pátio com sensor de estacionamento, chave reserva, manual do proprietário, de único dono.",
+    enableAiDescription: true,
+    aiDescription:
+      "Uma curiosidade interessante é que o Fiat Uno faz parte de uma linhagem iniciada em 1984 e se tornou um dos carros mais vendidos da história do Brasil, marcando gerações de motoristas pela sua simplicidade e resistência. O Fiat Uno Drive 1.0 2018 mantém essa tradição ao combinar economia de combustível, manutenção acessível e praticidade para o uso urbano, sendo equipado com o moderno motor Firefly 1.0, que oferece bom desempenho no dia a dia sem abrir mão da eficiência.",
     // horsepower: 177,
     isNew: false,
-    message: "Olá,%20me%20interessei%20pelo%20Fiat%20Uno%20Drive%201.0%20-%202018/2018"
+    message:
+      "Olá,%20me%20interessei%20pelo%20Fiat%20Uno%20Drive%201.0%20-%202018/2018",
   },
   {
     id: "3",
@@ -169,7 +178,6 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/onix/8.jpg",
       "/images/vehicles/onix/9.jpg",
       "/images/vehicles/onix/10.jpg",
-
     ],
     city: "Guarabira",
     state: "PB",
@@ -187,19 +195,22 @@ export const vehicles: Vehicle[] = [
     ],
     description:
       "Um hatch compacto reconhecido pela excelente economia de combustível e baixo custo de manutenção. Disponível hoje no pátio, com chave reserva e manual do proprietário. Fala com a nossa equipe !",
+    enableAiDescription: true,
+    aiDescription:
+      "Uma curiosidade interessante é que o Chevrolet Onix se tornou o carro mais vendido do Brasil por vários anos consecutivos, conquistando os motoristas pela combinação de economia, tecnologia e conforto. O Chevrolet Onix LT 1.4 se destaca pelo motor confiável e ágil para o uso urbano, além de oferecer bom espaço interno e equipamentos que tornam a experiência de dirigir mais prática no dia a dia, sendo uma escolha popular para quem busca um hatch moderno e eficiente.",
     // horsepower: 177,
     isNew: false,
-    message: "Olá,%20me%20interessei%20pelo%20Chevrolet%20Onix%20LT%201.4%20-%202017/2017"
+    message:
+      "Olá,%20me%20interessei%20pelo%20Chevrolet%20Onix%20LT%201.4%20-%202017/2017",
   },
+];
 
-]
-
-export const brands = [...new Set(vehicles.map((v) => v.brand))].sort()
-export const bodyTypes = [...new Set(vehicles.map((v) => v.bodyType))].sort()
-export const fuelTypes = [...new Set(vehicles.map((v) => v.fuel))].sort()
+export const brands = [...new Set(vehicles.map((v) => v.brand))].sort();
+export const bodyTypes = [...new Set(vehicles.map((v) => v.bodyType))].sort();
+export const fuelTypes = [...new Set(vehicles.map((v) => v.fuel))].sort();
 
 export function getVehicleById(id: string): Vehicle | undefined {
-  return vehicles.find((v) => v.id === id)
+  return vehicles.find((v) => v.id === id);
 }
 
 export function formatPrice(price: number): string {
@@ -208,9 +219,9 @@ export function formatPrice(price: number): string {
     currency: "BRL",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  })
+  });
 }
 
 export function formatMileage(mileage: number): string {
-  return mileage.toLocaleString("pt-BR") + " km"
+  return mileage.toLocaleString("pt-BR") + " km";
 }
