@@ -221,7 +221,7 @@ export default async function VehicleDetailPage({
                         Simule o financiamento
                       </h3>
                       <div className="flex flex-col gap-3">
-                        <div>
+                        {/* <div>
                           <Label className="text-xs text-muted-foreground">
                             Entrada
                           </Label>
@@ -230,8 +230,8 @@ export default async function VehicleDetailPage({
                             className="bg-secondary text-secondary-foreground"
                             defaultValue={`R$ ${Math.round(vehicle.price * 0.2).toLocaleString("pt-BR")}`}
                           />
-                        </div>
-                        <div>
+                        </div> */}
+                        {/* <div>
                           <Label className="text-xs text-muted-foreground">
                             Parcelas
                           </Label>
@@ -239,13 +239,13 @@ export default async function VehicleDetailPage({
                             placeholder="48x"
                             className="bg-secondary text-secondary-foreground"
                           />
-                        </div>
+                        </div> */}
                         <Link
                           target="_blank"
                           href={`https://api.whatsapp.com/send?phone=5583981415579&text=Olá, gostaria de simular um financiamento para o veículo ${vehicle.brand} ${vehicle.model} ${vehicle.version}.`}
                         >
                           <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                            Simular
+                            Consultar Simulação
                           </Button>
                         </Link>
                       </div>
