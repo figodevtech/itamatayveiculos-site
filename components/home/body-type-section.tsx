@@ -14,21 +14,21 @@ const bodyTypes = [
     slug: "SUV",
     icon: Boxes,
     description: "Versatilidade e espaco para a familia",
-    count: 4,
+    count: 0,
   },
   {
     name: "Hatchbacks",
     slug: "Hatch",
     icon: Car,
     description: "Compactos e economicos para a cidade",
-    count: 1,
+    count: 2,
   },
   {
     name: "Picapes",
     slug: "Picape",
     icon: Truck,
     description: "Forca e capacidade para trabalho e lazer",
-    count: 0,
+    count: 1,
   },
 ]
 

@@ -127,6 +127,30 @@ export function HeroSearch() {
                 >
                   2022
                 </SelectItem>
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="2021"
+                >
+                  2021
+                </SelectItem>
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="2020"
+                >
+                  2020
+                </SelectItem>
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="2019"
+                >
+                  2019
+                </SelectItem>
+                <SelectItem
+                  className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
+                  value="2018"
+                >
+                  2018
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>

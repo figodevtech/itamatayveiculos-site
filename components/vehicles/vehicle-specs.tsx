@@ -23,16 +23,28 @@ export function VehicleSpecs({ vehicle }: VehicleSpecsProps) {
       label: "Ano",
       value: `${vehicle.year}/${vehicle.yearModel}`,
     },
-    {
-      icon: Gauge,
-      label: "Quilometragem",
-      value: vehicle.mileage ? formatMileage(vehicle.mileage) : "",
-    },
+
+    ...(vehicle.mileage
+      ? [
+        {
+          icon: Gauge,
+          label: "Quilometragem",
+          value: formatMileage(vehicle.mileage),
+        },
+      ]
+      : []),
+
+    ...(vehicle.engineSize ? [
+      {
+        icon: Zap,
+        label: "Motor",
+        value: `${vehicle.engineSize} - ${vehicle.horsepower}cv`,
+      }
+    ] : []),
     { icon: Fuel, label: "Combustivel", value: vehicle.fuel },
     { icon: Settings, label: "Cambio", value: vehicle.transmission },
     { icon: Paintbrush, label: "Cor", value: vehicle.color },
     { icon: DoorOpen, label: "Portas", value: `${vehicle.doors} portas` },
-    { icon: Zap, label: "Motor", value: `${vehicle.engineSize} - ${vehicle.horsepower}cv` },
     { icon: Car, label: "Carroceria", value: vehicle.bodyType },
   ]
 
