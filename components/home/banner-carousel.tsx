@@ -1,103 +1,100 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Image from "next/image"
-import { ArrowRight, ArrowLeft } from "lucide-react"
+import * as React from "react";
+import Image from "next/image";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   type CarouselApi,
-} from "@/components/ui/carousel"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const bannerData = [
   {
     id: 1,
-    image: "/images/banners/qualidade.png",
+    image: "/images/banners/qualidade2.webp",
     alt: "qualidade",
   },
   {
     id: 2,
-    image: "/images/banners/pneus2.png",
+    image: "/images/banners/pneus2.webp",
     alt: "feirao",
   },
   {
     id: 3,
-    image: "/images/banners/moto.png",
+    image: "/images/banners/moto.webp",
     alt: "moto",
   },
-
-
-
-]
+];
 
 export function BannerCarousel() {
-  const [api, setApi] = React.useState<CarouselApi>()
-  const [current, setCurrent] = React.useState(0)
-  const [count, setCount] = React.useState(0)
+  const [api, setApi] = React.useState<CarouselApi>();
+  const [current, setCurrent] = React.useState(0);
+  const [count, setCount] = React.useState(0);
 
   // Initialize carousel count and selection listener
   React.useEffect(() => {
-    if (!api) return
+    if (!api) return;
 
-    setCount(api.scrollSnapList().length)
-    setCurrent(api.selectedScrollSnap() + 1)
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
 
     const onSelect = () => {
-      setCurrent(api.selectedScrollSnap() + 1)
-    }
+      setCurrent(api.selectedScrollSnap() + 1);
+    };
 
-    api.on("select", onSelect)
+    api.on("select", onSelect);
 
     return () => {
-      api.off("select", onSelect)
-    }
-  }, [api])
+      api.off("select", onSelect);
+    };
+  }, [api]);
 
-  // Timer logic: Resets on 'current' change (manual navigation) 
+  // Timer logic: Resets on 'current' change (manual navigation)
   // and respects page visibility
   React.useEffect(() => {
-    if (!api) return
+    if (!api) return;
 
-    let intervalId: NodeJS.Timeout | null = null
+    let intervalId: NodeJS.Timeout | null = null;
 
     const startTimer = () => {
-      if (intervalId) clearInterval(intervalId)
+      if (intervalId) clearInterval(intervalId);
       intervalId = setInterval(() => {
-        api.scrollNext()
-      }, 6000)
-    }
+        api.scrollNext();
+      }, 6000);
+    };
 
     const stopTimer = () => {
       if (intervalId) {
-        clearInterval(intervalId)
-        intervalId = null
+        clearInterval(intervalId);
+        intervalId = null;
       }
-    }
+    };
 
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        stopTimer()
+        stopTimer();
       } else {
-        startTimer()
+        startTimer();
       }
-    }
+    };
 
     // Only start if tab is visible
     if (!document.hidden) {
-      startTimer()
+      startTimer();
     }
 
-    document.addEventListener("visibilitychange", handleVisibilityChange)
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      stopTimer()
-      document.removeEventListener("visibilitychange", handleVisibilityChange)
-    }
-  }, [api, current])
+      stopTimer();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [api, current]);
 
   return (
     <div className="w-full relative group">
@@ -158,7 +155,7 @@ export function BannerCarousel() {
                 "h-2 rounded-full transition-all duration-300 shadow-sm",
                 current === index + 1
                   ? "w-8 bg-card"
-                  : "w-2 bg-card/50 hover:bg-card/70"
+                  : "w-2 bg-card/50 hover:bg-card/70",
               )}
               onClick={() => api?.scrollTo(index)}
               aria-label={`Ir para slide ${index + 1}`}
@@ -167,5 +164,5 @@ export function BannerCarousel() {
         </div>
       </Carousel>
     </div>
-  )
+  );
 }
