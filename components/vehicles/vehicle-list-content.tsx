@@ -1,29 +1,31 @@
-"use client"
+"use client";
 
-import { useState, useCallback } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { SlidersHorizontal, Grid3X3, List } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { SlidersHorizontal, Grid3X3, List } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { VehicleCard } from "@/components/vehicle-card"
-import { FilterSidebar } from "@/components/vehicles/filter-sidebar"
-import type { Vehicle } from "@/lib/vehicles"
+} from "@/components/ui/select";
+import { VehicleCard } from "@/components/vehicle-card";
+import { FilterSidebar } from "@/components/vehicles/filter-sidebar";
+import type { Vehicle } from "@/lib/vehicles";
 
 interface VehicleListContentProps {
-  initialVehicles: Vehicle[]
+  initialVehicles: Vehicle[];
 }
 
-export function VehicleListContent({ initialVehicles }: VehicleListContentProps) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [showFilters, setShowFilters] = useState(false)
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+export function VehicleListContent({
+  initialVehicles,
+}: VehicleListContentProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [showFilters, setShowFilters] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const filters = {
     brand: searchParams.get("marca") || "all",
@@ -31,45 +33,51 @@ export function VehicleListContent({ initialVehicles }: VehicleListContentProps)
     fuelType: searchParams.get("combustivel") || "",
     priceRange: [
       Number(searchParams.get("precoMin")) || 0,
-      Number(searchParams.get("precoMax")) || 400000
+      Number(searchParams.get("precoMax")) || 400000,
     ] as [number, number],
     yearMin: searchParams.get("anoMin") || "any",
     yearMax: searchParams.get("anoMax") || "any",
     sortBy: searchParams.get("sortBy") || "relevance",
-  }
+  };
 
   const handleFilterChange = useCallback(
     (key: string, value: unknown) => {
-      const params = new URLSearchParams(searchParams.toString())
-      
-      let newValue = value as string
-      if (key === 'priceRange') {
+      const params = new URLSearchParams(searchParams.toString());
+
+      let newValue = value as string;
+      if (key === "priceRange") {
         const range = value as [number, number];
-        params.set('precoMin', range[0].toString());
-        params.set('precoMax', range[1].toString());
+        params.set("precoMin", range[0].toString());
+        params.set("precoMax", range[1].toString());
       } else {
-        const urlKey = 
-          key === 'brand' ? 'marca' :
-          key === 'bodyType' ? 'tipo' :
-          key === 'fuelType' ? 'combustivel' :
-          key === 'yearMin' ? 'anoMin' :
-          key === 'yearMax' ? 'anoMax' : key;
-          
-        if (value && value !== 'all' && value !== 'any') {
-          params.set(urlKey, newValue)
+        const urlKey =
+          key === "brand"
+            ? "marca"
+            : key === "bodyType"
+              ? "tipo"
+              : key === "fuelType"
+                ? "combustivel"
+                : key === "yearMin"
+                  ? "anoMin"
+                  : key === "yearMax"
+                    ? "anoMax"
+                    : key;
+
+        if (value && value !== "all" && value !== "any") {
+          params.set(urlKey, newValue);
         } else {
-          params.delete(urlKey)
+          params.delete(urlKey);
         }
       }
-      
-      router.push(`/veiculos?${params.toString()}`, { scroll: false })
+
+      router.push(`/veiculos?${params.toString()}`, { scroll: false });
     },
-    [router, searchParams]
-  )
+    [router, searchParams],
+  );
 
   const handleClearFilters = useCallback(() => {
-    router.push('/veiculos', { scroll: false })
-  }, [router])
+    router.push("/veiculos", { scroll: false });
+  }, [router]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 lg:px-6 lg:py-8">
@@ -97,20 +105,22 @@ export function VehicleListContent({ initialVehicles }: VehicleListContentProps)
           <div className="hidden items-center gap-1 rounded-lg border border-border p-0.5 md:flex">
             <button
               onClick={() => setViewMode("grid")}
-              className={`rounded-md p-1.5 transition-colors ${viewMode === "grid"
+              className={`rounded-md p-1.5 transition-colors ${
+                viewMode === "grid"
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-foreground"
-                }`}
+              }`}
               aria-label="Visualizar em grade"
             >
               <Grid3X3 className="h-4 w-4" />
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`rounded-md p-1.5 transition-colors ${viewMode === "list"
+              className={`rounded-md p-1.5 transition-colors ${
+                viewMode === "list"
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-foreground"
-                }`}
+              }`}
               aria-label="Visualizar em lista"
             >
               <List className="h-4 w-4" />
@@ -173,7 +183,7 @@ export function VehicleListContent({ initialVehicles }: VehicleListContentProps)
             <div
               className={
                 viewMode === "grid"
-                  ? "grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3"
+                  ? "grid grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-3"
                   : "flex flex-col gap-4"
               }
             >
@@ -201,5 +211,5 @@ export function VehicleListContent({ initialVehicles }: VehicleListContentProps)
         </div>
       </div>
     </div>
-  )
+  );
 }

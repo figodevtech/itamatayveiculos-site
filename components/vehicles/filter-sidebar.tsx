@@ -1,33 +1,33 @@
-"use client"
+"use client";
 
-import { X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { brands, bodyTypes, fuelTypes } from "@/lib/vehicles"
+} from "@/components/ui/select";
+import { brands, bodyTypes, fuelTypes } from "@/lib/vehicles";
 
 interface FilterSidebarProps {
   filters: {
-    brand: string
-    bodyType: string
-    fuelType: string
-    priceRange: [number, number]
-    yearMin: string
-    yearMax: string
-    sortBy: string
-  }
-  onFilterChange: (key: string, value: unknown) => void
-  onClearFilters: () => void
-  onClose?: () => void
-  resultCount: number
+    brand: string;
+    bodyType: string;
+    fuelType: string;
+    priceRange: [number, number];
+    yearMin: string;
+    yearMax: string;
+    sortBy: string;
+  };
+  onFilterChange: (key: string, value: unknown) => void;
+  onClearFilters: () => void;
+  onClose?: () => void;
+  resultCount: number;
 }
 
 export function FilterSidebar({
@@ -40,9 +40,7 @@ export function FilterSidebar({
   return (
     <aside className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-mono text-lg font-bold text-foreground">
-          Filtros
-        </h2>
+        <h2 className="font-mono text-lg font-bold text-foreground">Filtros</h2>
         <div className="flex items-center gap-2">
           <button
             onClick={onClearFilters}
@@ -141,12 +139,8 @@ export function FilterSidebar({
           className="mb-2"
         />
         <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>
-            R$ {filters.priceRange[0].toLocaleString("pt-BR")}
-          </span>
-          <span>
-            R$ {filters.priceRange[1].toLocaleString("pt-BR")}
-          </span>
+          <span>R$ {filters.priceRange[0].toLocaleString("pt-BR")}</span>
+          <span>R$ {filters.priceRange[1].toLocaleString("pt-BR")}</span>
         </div>
       </div>
 
@@ -154,12 +148,12 @@ export function FilterSidebar({
         <Label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Ano
         </Label>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col items-start gap-2">
           <Select
             value={filters.yearMin}
             onValueChange={(v) => onFilterChange("yearMin", v)}
           >
-            <SelectTrigger className="bg-card text-card-foreground">
+            <SelectTrigger className="w-full bg-card text-card-foreground">
               <SelectValue placeholder="Min" />
             </SelectTrigger>
             <SelectContent>
@@ -172,12 +166,12 @@ export function FilterSidebar({
               <SelectItem value="2025">2025</SelectItem>
             </SelectContent>
           </Select>
-          <span className="text-xs text-muted-foreground">ate</span>
+          <span className="text-xs text-muted-foreground">até</span>
           <Select
             value={filters.yearMax}
             onValueChange={(v) => onFilterChange("yearMax", v)}
           >
-            <SelectTrigger className="bg-card text-card-foreground">
+            <SelectTrigger className="w-full bg-card text-card-foreground">
               <SelectValue placeholder="Max" />
             </SelectTrigger>
             <SelectContent>
@@ -200,5 +194,5 @@ export function FilterSidebar({
         Ver {resultCount} resultados
       </Button>
     </aside>
-  )
+  );
 }

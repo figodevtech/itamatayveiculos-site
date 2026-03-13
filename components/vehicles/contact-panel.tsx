@@ -1,15 +1,15 @@
-import { Phone, MessageCircle, Shield, Star } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import type { Vehicle } from "@/lib/vehicles"
-import { formatPrice } from "@/lib/vehicles"
-import Link from "next/link"
+import { Phone, MessageCircle, Shield, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import type { Vehicle } from "@/lib/vehicles";
+import { formatPrice } from "@/lib/vehicles";
+import Link from "next/link";
 
 interface ContactPanelProps {
-  vehicle: Vehicle
+  vehicle: Vehicle;
 }
 
 export function ContactPanel({ vehicle }: ContactPanelProps) {
@@ -24,9 +24,10 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
           <div className="mt-2 flex items-center gap-2">
             <span className="text-sm text-muted-foreground">
               ou parcelas de{" "}
-              <span className="font-semibold text-foreground">
+              {/* <span className="font-semibold text-foreground">
                 R$ {Math.round(vehicle.price / 60).toLocaleString("pt-BR")}/mes
-              </span>
+              </span> */}
+              <span className="font-semibold text-foreground">até 60x</span>
             </span>
           </div>
 
@@ -39,7 +40,6 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
               Ver telefone
             </Button> */}
             {vehicle.message ? (
-
               <Link
                 target="_blank"
                 href={`https://api.whatsapp.com/send?phone=5583981415579&text=${vehicle.message}`}
@@ -53,8 +53,8 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
                   Enviar mensagem
                 </Button>
               </Link>
-            ) :
-              (<Link
+            ) : (
+              <Link
                 target="_blank"
                 href={`https://api.whatsapp.com/send?phone=5583981415579`}
               >
@@ -66,7 +66,8 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
                   <MessageCircle className="mr-2 h-4 w-4" />
                   Enviar mensagem
                 </Button>
-              </Link>)}
+              </Link>
+            )}
           </div>
 
           <div className="mt-4 flex items-center gap-2 rounded-lg bg-secondary p-3">
@@ -124,17 +125,21 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
               <Input
                 placeholder="48x"
                 className="bg-secondary text-secondary-foreground"
-                defaultValue="48x"
               />
             </div>
-            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-              Simular
-            </Button>
+            <Link
+              target="_blank"
+              href={`https://api.whatsapp.com/send?phone=5583981415579&text=Olá, gostaria de simular um financiamento para o veículo ${vehicle.brand} ${vehicle.model} ${vehicle.version}.`}
+            >
+              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+                Simular
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="border-border bg-card">
+      {/* <Card className="border-border bg-card">
         <CardContent className="p-5">
           <h3 className="mb-4 font-semibold text-card-foreground">
             Envie uma proposta
@@ -165,7 +170,7 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
             </Button>
           </form>
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
-  )
+  );
 }
