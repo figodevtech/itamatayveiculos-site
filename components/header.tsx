@@ -81,7 +81,7 @@ export function Header() {
             <Link
               target="_blank"
               href="
-            https://wa.me/send/?phone=5583981415579&text=Olá,%20gostaria%20de%20anunciar%20um%20veículo%20no%20seu%20site.%20
+            https://api.whatsapp.com/send?phone=5583981415579&text=Olá,%20gostaria%20de%20anunciar%20um%20veículo%20no%20seu%20site.%20
             ">Anunciar</Link>
           </Button>
         </div>
@@ -123,7 +123,7 @@ export function Header() {
                 <Link
                   target="_blank"
                   href="
-            https://wa.me/send/?phone=5583981415579&text=Olá,%20gostaria%20de%20anunciar%20um%20veículo%20no%20seu%20site.%20
+            https://api.whatsapp.com/send?phone=5583981415579&text=Olá,%20gostaria%20de%20anunciar%20um%20veículo%20no%20seu%20site.%20
             ">Anunciar</Link>
               </Button>
             </div>
