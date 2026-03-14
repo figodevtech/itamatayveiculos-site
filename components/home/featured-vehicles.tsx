@@ -2,9 +2,10 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { VehicleCard } from "@/components/vehicle-card"
-import { vehicles } from "@/lib/vehicles"
+import { getVehicles } from "@/lib/vehicles"
 
-export function FeaturedVehicles() {
+export async function FeaturedVehicles() {
+  const vehicles = await getVehicles()
   const featured = vehicles.slice(0, 4)
 
   return (

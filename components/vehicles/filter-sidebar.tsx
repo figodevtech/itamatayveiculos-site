@@ -12,7 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { brands, bodyTypes, fuelTypes } from "@/lib/vehicles";
+import { getBrands, getBodyTypes, getFuelTypes } from "@/lib/vehicles";
+import { useEffect, useState } from "react";
 
 interface FilterSidebarProps {
   filters: {
@@ -37,6 +38,22 @@ export function FilterSidebar({
   onClose,
   resultCount,
 }: FilterSidebarProps) {
+  const [brands, setBrands] = useState<string[]>([]);
+  const [bodyTypes, setBodyTypes] = useState<string[]>([]);
+  const [fuelTypes, setFuelTypes] = useState<string[]>([]);
+
+  useEffect(() => {
+    Promise.all([
+      getBrands(),
+      getBodyTypes(),
+      getFuelTypes()
+    ]).then(([fetchedBrands, fetchedBodyTypes, fetchedFuelTypes]) => {
+      setBrands(fetchedBrands);
+      setBodyTypes(fetchedBodyTypes);
+      setFuelTypes(fetchedFuelTypes);
+    });
+  }, []);
+
   return (
     <aside className="flex flex-col gap-6">
       <div className="flex items-center justify-between">

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Search, Car, DollarSign, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -11,13 +11,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { brands } from "@/lib/vehicles"
+import { getBrands } from "@/lib/vehicles"
 
 export function HeroSearch() {
   const router = useRouter()
   const [brand, setBrand] = useState("")
   const [priceRange, setPriceRange] = useState("")
   const [yearRange, setYearRange] = useState("")
+  const [brandsList, setBrandsList] = useState<string[]>([])
+  
+  useEffect(() => {
+    getBrands().then(setBrandsList)
+  }, [])
 
   function handleSearch() {
     const params = new URLSearchParams()
@@ -44,7 +49,7 @@ export function HeroSearch() {
                 <SelectValue placeholder="Todas as marcas" />
               </SelectTrigger>
               <SelectContent position="popper">
-                {brands.map((b) => (
+                {brandsList.map((b) => (
                   <SelectItem
                     className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
                     key={b} value={b}>

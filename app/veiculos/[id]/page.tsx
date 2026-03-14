@@ -9,7 +9,7 @@ import { ContactPanel } from "@/components/vehicles/contact-panel";
 import { VehicleCard } from "@/components/vehicle-card";
 import {
   getVehicleById,
-  vehicles,
+  getVehicles,
   formatPrice,
   formatMileage,
 } from "@/lib/vehicles";
@@ -26,7 +26,7 @@ interface VehicleDetailPageProps {
 
 export async function generateMetadata({ params }: VehicleDetailPageProps) {
   const { id } = await params;
-  const vehicle = getVehicleById(id);
+  const vehicle = await getVehicleById(id);
   if (!vehicle) return { title: "Veiculo nao encontrado" };
   return {
     title: `${vehicle.brand} ${vehicle.model} ${vehicle.version} - Itamatay Veículos`,
@@ -38,13 +38,15 @@ export default async function VehicleDetailPage({
   params,
 }: VehicleDetailPageProps) {
   const { id } = await params;
-  const vehicle = getVehicleById(id);
+  const vehicle = await getVehicleById(id);
 
   if (!vehicle) {
     notFound();
   }
 
-  const relatedVehicles = vehicles
+  const allVehicles = await getVehicles();
+
+  const relatedVehicles = allVehicles
     .filter(
       (v) =>
         v.id !== vehicle.id &&
@@ -134,7 +136,7 @@ export default async function VehicleDetailPage({
           <div className="flex flex-col gap-6 lg:flex-row">
             <div className="flex-1">
               <VehicleGallery
-                images={vehicle.images}
+                images={vehicle.images.map((img) => img.image_url)}
                 alt={`${vehicle.brand} ${vehicle.model}`}
               />
 
@@ -268,7 +270,7 @@ export default async function VehicleDetailPage({
                   </CardContent>
                 </Card>
                 {vehicle.enableAiDescription && (
-                  <AIDescriptionBox text={vehicle.aiDescription} />
+                  <AIDescriptionBox text={vehicle.aiDescription || undefined} />
                 )}
 
                 {/* Features */}

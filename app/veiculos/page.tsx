@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { VehicleListContent } from "@/components/vehicles/vehicle-list-content"
-import { vehicles as allVehicles } from "@/lib/vehicles"
+import { getVehicles } from "@/lib/vehicles"
 
 export const metadata = {
   title: "Itamatay Veículos",
@@ -26,6 +26,7 @@ export default async function VeiculosPage({
   const yearMax = typeof params.anoMax === 'string' ? params.anoMax : '';
   const sortBy = typeof params.sortBy === 'string' ? params.sortBy : 'relevance';
 
+  const allVehicles = await getVehicles();
   let filtered = [...allVehicles];
 
   if (brand && brand !== "all") {

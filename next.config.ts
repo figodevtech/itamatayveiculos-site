@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.carlogos.org",
       },
+      {
+        protocol: "https",
+        hostname: "uozokadcvzmhszatgqcu.supabase.co",
+      },
     ],
   },
 };
