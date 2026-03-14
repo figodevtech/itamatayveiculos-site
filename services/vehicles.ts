@@ -29,6 +29,7 @@ export function mapVehicle(row: any): Vehicle {
     engineSize: row.engine_size,
     horsepower: row.horsepower,
     isNew: row.is_new,
+    featured: row.featured,
     createdAt: row.created_at,
     status: row.status as VehicleStatus,
   };
@@ -55,13 +56,50 @@ export async function getVehicles(): Promise<Vehicle[]> {
   return data.map((row: any) => {
     const vehicle = mapVehicle(row);
     let displayImage = row.image;
-    
+
     // Filter out inactive images and sort
     const activeImages = row.vehicle_images ? row.vehicle_images.filter((img: any) => img.active) : [];
-    
+
     if (activeImages.length > 0) {
       const sortedImages = activeImages.sort((a: any, b: any) => a.sort_order - b.sort_order);
-      displayImage = sortedImages[0].image_url;
+      displayImage = vehicle.image;
+    }
+    return {
+      ...vehicle,
+      image: displayImage, // Make sure image has the primary configured one or default
+    };
+  });
+}
+
+export async function getFeaturedVehicles(): Promise<Vehicle[]> {
+  const { data, error } = await supabase
+    .from("vehicles")
+    .select(`
+      *,
+      vehicle_images (
+        id, image_url, sort_order, active
+      )
+    `)
+    .eq("deleted", false)
+    .eq("status", "Em venda")
+    .eq("featured", true)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching featured vehicles:", error);
+    return [];
+  }
+
+  return data.map((row: any) => {
+    const vehicle = mapVehicle(row);
+    let displayImage = row.image;
+
+    // Filter out inactive images and sort
+    const activeImages = row.vehicle_images ? row.vehicle_images.filter((img: any) => img.active) : [];
+
+    if (activeImages.length > 0) {
+      const sortedImages = activeImages.sort((a: any, b: any) => a.sort_order - b.sort_order);
+      displayImage = vehicle.image;
     }
     return {
       ...vehicle,

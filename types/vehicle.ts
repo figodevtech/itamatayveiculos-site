@@ -1,4 +1,4 @@
-export type SellerType = "concessionaria" | "loja" | "particular";
+export type SellerType = "dealership" | "store" | "private";
 export type VehicleStatus = "Em venda" | "Vendido" | "Rascunho" | "Pagamento";
 
 export interface Vehicle {
@@ -28,6 +28,7 @@ export interface Vehicle {
   engineSize?: string | null;
   horsepower?: number | null;
   isNew: boolean;
+  featured: boolean;
   message?: string;
   createdAt?: string;
   status: VehicleStatus;

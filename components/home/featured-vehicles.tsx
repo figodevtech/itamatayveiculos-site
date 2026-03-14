@@ -2,10 +2,10 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { VehicleCard } from "@/components/vehicle-card"
-import { getVehicles } from "@/lib/vehicles"
+import { getFeaturedVehicles } from "@/lib/vehicles"
 
 export async function FeaturedVehicles() {
-  const vehicles = await getVehicles()
+  const vehicles = await getFeaturedVehicles()
   const featured = vehicles.slice(0, 4)
 
   return (
@@ -14,7 +14,7 @@ export async function FeaturedVehicles() {
         <div className="mb-8 flex items-end justify-between">
           <div>
             <h2 className="font-mono text-2xl font-bold text-foreground">
-              Destaques da semana
+              Veículos em Destaque
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Veiculos selecionados com os melhores precos

@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { MapPin, Fuel, Gauge, Calendar } from "lucide-react"
+import { MapPin, Fuel, Gauge, Calendar, Star } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import type { Vehicle } from "@/lib/vehicles"
@@ -14,7 +14,7 @@ interface VehicleCardProps {
 export function VehicleCard({ vehicle, priority }: VehicleCardProps) {
   return (
     <Link href={`/veiculos/${vehicle.id}`}>
-      <Card className="group overflow-hidden border-border bg-card transition-all hover:shadow-lg h-full">
+      <Card className="group pt-0 overflow-hidden border-border bg-card transition-all hover:shadow-lg h-full">
         <div className="relative aspect-16/10 overflow-hidden">
           <Image
             src={vehicle.image}
@@ -34,13 +34,23 @@ export function VehicleCard({ vehicle, priority }: VehicleCardProps) {
               variant="secondary"
               className="bg-card/90 text-card-foreground backdrop-blur-sm"
             >
-              {vehicle.sellerType === "concessionaria"
+              {vehicle.sellerType === "dealership"
                 ? "Concessionaria"
-                : vehicle.sellerType === "loja"
+                : vehicle.sellerType === "store"
                   ? "Loja"
                   : "Particular"}
             </Badge>
           </div>
+          {vehicle.featured && (
+            <div className="absolute left-3 top-3">
+              <Badge
+                variant="secondary"
+                className="bg-pink-800/70 backdrop-blur-sm text-white"
+              >
+                <Star className="h-3.5 w-3.5 shrink-0" /> Destaque
+              </Badge>
+            </div>
+          )}
         </div>
 
         <CardContent className="p-4">

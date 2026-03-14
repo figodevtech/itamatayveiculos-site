@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, Heart, Share2, Check, Star, Shield } from "lucide-react";
+import { ChevronRight, Heart, Share2, Check, Star, Shield, Pin, Locate, MapPin } from "lucide-react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { VehicleGallery } from "@/components/vehicles/vehicle-gallery";
@@ -89,9 +89,9 @@ export default async function VehicleDetailPage({
                   variant="secondary"
                   className="bg-primary/10 text-primary"
                 >
-                  {vehicle.sellerType === "concessionaria"
+                  {vehicle.sellerType === "dealership"
                     ? "Concessionaria"
-                    : vehicle.sellerType === "loja"
+                    : vehicle.sellerType === "store"
                       ? "Loja"
                       : "Particular"}
                 </Badge>
@@ -114,8 +114,8 @@ export default async function VehicleDetailPage({
                 {vehicle.mileage && (
                   <span>{formatMileage(vehicle.mileage)}</span>
                 )}
-                <span>
-                  {vehicle.city} - {vehicle.state}
+                <span className="flex items-center gap-1">
+                  <MapPin className="h-3.5 w-3.5 shrink-0" /> {vehicle.city} - {vehicle.state}
                 </span>
               </div>
             </div>
@@ -131,6 +131,7 @@ export default async function VehicleDetailPage({
               </Button>
             </div>
           </div>
+
 
           {/* Main content */}
           <div className="flex flex-col gap-6 lg:flex-row">
@@ -199,9 +200,9 @@ export default async function VehicleDetailPage({
                             {vehicle.seller}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {vehicle.sellerType === "concessionaria"
+                            {vehicle.sellerType === "dealership"
                               ? "Concessionaria"
-                              : vehicle.sellerType === "loja"
+                              : vehicle.sellerType === "store"
                                 ? "Loja"
                                 : "Particular"}
                           </p>
