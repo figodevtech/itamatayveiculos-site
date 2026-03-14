@@ -87,9 +87,9 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
                 {vehicle.seller}
               </p>
               <p className="text-xs text-muted-foreground">
-                {vehicle.sellerType === "concessionaria"
+                {vehicle.sellerType === "dealership"
                   ? "Concessionaria"
-                  : vehicle.sellerType === "loja"
+                  : vehicle.sellerType === "store"
                     ? "Loja"
                     : "Particular"}
               </p>
