@@ -1,6 +1,6 @@
 import { Header } from "@/components/header"
 
-export const revalidate = 60;
+export const revalidate = 0;
 import { Footer } from "@/components/footer"
 import { BannerCarousel } from "@/components/home/banner-carousel"
 import { HeroSearch } from "@/components/home/hero-search"
