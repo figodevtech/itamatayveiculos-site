@@ -4,6 +4,8 @@ import { Footer } from "@/components/footer"
 import { VehicleListContent } from "@/components/vehicles/vehicle-list-content"
 import { getVehicles } from "@/lib/vehicles"
 
+export const revalidate = 0;
+
 export const metadata = {
   title: "Itamatay Veículos",
   description:
