@@ -41,15 +41,20 @@ export function VehicleGallery({ images, alt }: VehicleGalleryProps) {
     <div>
 
       <div className="group relative aspect-16/10 overflow-hidden rounded-xl bg-muted">
-        <Image
-          src={images[currentIndex]}
-          alt={`${alt} - Foto ${currentIndex + 1}`}
-          fill
-          className="object-cover"
-          priority={currentIndex === 0}
-          sizes="(max-width: 768px) 100vw, 864px"
-          quality={85}
-        />
+        {images.map((img, index) => (
+          <Image
+            key={index}
+            src={img}
+            alt={`${alt} - Foto ${index + 1}`}
+            fill
+            className={`object-cover transition-opacity duration-300 ${
+              index === currentIndex ? "z-10 opacity-100" : "z-0 opacity-0 pointer-events-none"
+            }`}
+            priority={index === 0}
+            sizes="(max-width: 768px) 100vw, 864px"
+            quality={85}
+          />
+        ))}
 
         {images.length > 1 && (
           <>
