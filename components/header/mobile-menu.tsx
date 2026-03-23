@@ -46,6 +46,12 @@ export function MobileMenu() {
             >
               Financiamento
             </Link>
+            <Link
+              href="/shorts"
+              className="text-sm font-medium text-black/80 transition-colors hover:text-black"
+            >
+              Shorts
+            </Link>
             <div className="flex items-center gap-3 pt-2">
               <Button
                 variant="secondary"

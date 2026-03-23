@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, Heart, Share2, Check, Star, Shield, Pin, Locate, MapPin } from "lucide-react";
+import { ChevronRight, Heart, Share2, Check, Star, Shield, Pin, Locate, MapPin, Play } from "lucide-react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { VehicleGallery } from "@/components/vehicles/vehicle-gallery";
@@ -13,6 +13,7 @@ import {
   formatPrice,
   formatMileage,
 } from "@/lib/vehicles";
+import { getShortByVehicleId } from "@/services/shorts";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -45,6 +46,8 @@ export default async function VehicleDetailPage({
   if (!vehicle) {
     notFound();
   }
+
+  const shortVideo = await getShortByVehicleId(id);
 
   const allVehicles = await getVehicles();
 
@@ -122,7 +125,7 @@ export default async function VehicleDetailPage({
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full md:w-auto">
               <Button variant="outline" size="icon">
                 <Heart className="h-4 w-4" />
                 <span className="sr-only">Favoritar</span>
@@ -131,6 +134,21 @@ export default async function VehicleDetailPage({
                 <Share2 className="h-4 w-4" />
                 <span className="sr-only">Compartilhar</span>
               </Button>
+
+              {shortVideo && (
+                <div className="ml-auto animate-in fade-in zoom-in-95">
+                  <Link href={`/shorts?v=${shortVideo.id}`} className="block outline-none appearance-none">
+                    <Button 
+                      className="bg-linear-to-r from-rose-500 via-red-500 to-orange-500 hover:shadow-md shadow-red-500/20 text-white font-bold group relative overflow-hidden transition-all transform-gpu active:scale-95 border-0 rounded-xl"
+                      style={{ background: 'linear-gradient(to right, #f43f5e, #ef4444, #f97316)' }}
+                    >
+                      <Play className="w-4 h-4 mr-2 fill-white group-hover:scale-110 transition-transform" />
+                      <span className="tracking-wide">Assistir Shorts</span>
+                      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] xl:group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out" />
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
 

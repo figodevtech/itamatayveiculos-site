@@ -3,13 +3,14 @@ import { User, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { MobileMenu } from "./header/mobile-menu"
+import { ShortsButton } from "./shorts/shorts-button"
 
 export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white text-primary-foreground shadow-md">
       <div className="mx-auto flex items-center relative justify-center md:justify-between px-6 py-3.5 lg:px-10">
         <MobileMenu />
-        
+
         <Link href="/" className="flex items-center gap-2 flex-row">
           <Image
             height={50}
@@ -38,6 +39,12 @@ export function Header() {
             className="text-sm font-medium text-black/80 transition-colors hover:text-black"
           >
             Financiamento
+          </Link>
+          <Link
+            href="/shorts"
+            className="text-sm font-medium text-black/80 transition-colors hover:text-black"
+          >
+            <ShortsButton />
           </Link>
         </nav>
 
