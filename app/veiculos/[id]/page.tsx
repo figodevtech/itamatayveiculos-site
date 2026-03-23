@@ -1,6 +1,17 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, Heart, Share2, Check, Star, Shield, Pin, Locate, MapPin, Play } from "lucide-react";
+import {
+  ChevronRight,
+  Heart,
+  Share2,
+  Check,
+  Star,
+  Shield,
+  Pin,
+  Locate,
+  MapPin,
+  Play,
+} from "lucide-react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { VehicleGallery } from "@/components/vehicles/vehicle-gallery";
@@ -120,7 +131,8 @@ export default async function VehicleDetailPage({
                   <span>{formatMileage(vehicle.mileage)}</span>
                 )}
                 <span className="flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5 shrink-0" /> {vehicle.city} - {vehicle.state}
+                  <MapPin className="h-3.5 w-3.5 shrink-0" /> {vehicle.city} -{" "}
+                  {vehicle.state}
                 </span>
               </div>
             </div>
@@ -137,10 +149,16 @@ export default async function VehicleDetailPage({
 
               {shortVideo && (
                 <div className="ml-auto animate-in fade-in zoom-in-95">
-                  <Link href={`/shorts?v=${shortVideo.id}`} className="block outline-none appearance-none">
-                    <Button 
+                  <Link
+                    href={`/shorts?v=${shortVideo.id}`}
+                    className="block outline-none appearance-none"
+                  >
+                    <Button
                       className="bg-linear-to-r from-rose-500 via-red-500 to-orange-500 hover:shadow-md shadow-red-500/20 text-white font-bold group relative overflow-hidden transition-all transform-gpu active:scale-95 border-0 rounded-xl"
-                      style={{ background: 'linear-gradient(to right, #f43f5e, #ef4444, #f97316)' }}
+                      style={{
+                        background:
+                          "linear-gradient(to right, #f43f5e, #ef4444, #f97316)",
+                      }}
                     >
                       <Play className="w-4 h-4 mr-2 fill-white group-hover:scale-110 transition-transform" />
                       <span className="tracking-wide">Assistir Shorts</span>
@@ -151,7 +169,6 @@ export default async function VehicleDetailPage({
               )}
             </div>
           </div>
-
 
           {/* Main content */}
           <div className="flex flex-col gap-6 lg:flex-row">

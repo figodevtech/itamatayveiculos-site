@@ -12,7 +12,7 @@ export default function ShortsClient({ initialVideos }: { initialVideos: ShortVi
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<VehicleReelItem | null>(null);
   const [likedItems, setLikedItems] = useState<Set<string>>(new Set());

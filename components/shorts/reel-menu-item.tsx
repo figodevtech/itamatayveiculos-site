@@ -79,6 +79,19 @@ export function ReelMenuItem({
     const attemptPlay = () => {
       if (!shouldPlay) return;
 
+      // Explicitly set muted before play for iOS autoplay compliance
+      video.muted = isMuted;
+
+      // Hack for iOS/WebKit: if returning to a video, nudge currentTime to force re-render
+      if (video.currentTime > 0) {
+        video.currentTime = video.currentTime + 0.001;
+      }
+
+      // If video state is not loaded, force load
+      if (video.readyState === 0) {
+        video.load();
+      }
+
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch((error) => {
@@ -98,8 +111,6 @@ export function ReelMenuItem({
       attemptPlay();
     } else {
       video.pause();
-      // We DON'T reset hasStartedPlaying here anymore to keep the UI smooth 
-      // when scrolling back and forth, unless we want to force a reload.
     }
   }, [shouldPlay]);
 
@@ -247,13 +258,17 @@ export function ReelMenuItem({
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
         src={item.videoUrl}
+        poster={item.vehicle.image}
         muted={isMuted}
         loop
         playsInline
         autoPlay={isActive}
         preload={isActive || isNearby ? "auto" : "metadata"}
+        onContextMenu={(e) => e.preventDefault()}
         onClick={handleTap}
         aria-label={`Vídeo do veículo ${vehicleName}`}
+        // @ts-ignore - webkit-playsinline is a specific attribute for iOS
+        webkit-playsinline="true"
       />
 
       {/* Buffering Indicator */}

@@ -1,11 +1,11 @@
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { VehicleCard } from "@/components/vehicle-card"
-import { getFeaturedVehicles } from "@/lib/vehicles"
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { VehicleCard } from "@/components/vehicle-card";
+import { getFeaturedVehicles } from "@/lib/vehicles";
 
 export async function FeaturedVehicles() {
-  const vehicles = await getFeaturedVehicles()
+  const vehicles = await getFeaturedVehicles();
 
   return (
     <section className="bg-secondary/50 py-12 lg:py-16">
@@ -51,5 +51,5 @@ export async function FeaturedVehicles() {
         </div>
       </div>
     </section>
-  )
+  );
 }

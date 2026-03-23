@@ -1,14 +1,14 @@
-import Image from "next/image"
-import Link from "next/link"
-import { MapPin, Fuel, Gauge, Calendar, Star } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import type { Vehicle } from "@/lib/vehicles"
-import { formatPrice, formatMileage } from "@/lib/vehicles"
+import Image from "next/image";
+import Link from "next/link";
+import { MapPin, Fuel, Gauge, Calendar, Star } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import type { Vehicle } from "@/lib/vehicles";
+import { formatPrice, formatMileage } from "@/lib/vehicles";
 
 interface VehicleCardProps {
-  vehicle: Vehicle
-  priority?: boolean
+  vehicle: Vehicle;
+  priority?: boolean;
 }
 
 export function VehicleCard({ vehicle, priority }: VehicleCardProps) {
@@ -70,7 +70,7 @@ export function VehicleCard({ vehicle, priority }: VehicleCardProps) {
             {formatPrice(vehicle.price)}
           </p>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="flex flex-wrap gap-2 sm:grid sm:grid-cols-2">
             <div className="flex items-center gap-1.5 text-muted-foreground">
               <Calendar className="h-3.5 w-3.5 shrink-0" />
               <span className="text-xs">
@@ -80,7 +80,9 @@ export function VehicleCard({ vehicle, priority }: VehicleCardProps) {
             {vehicle.mileage && (
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Gauge className="h-3.5 w-3.5 shrink-0" />
-                <span className="text-xs">{formatMileage(vehicle.mileage)}</span>
+                <span className="text-xs">
+                  {formatMileage(vehicle.mileage)}
+                </span>
               </div>
             )}
             <div className="flex items-center gap-1.5 text-muted-foreground">
@@ -97,5 +99,5 @@ export function VehicleCard({ vehicle, priority }: VehicleCardProps) {
         </CardContent>
       </Card>
     </Link>
-  )
+  );
 }
