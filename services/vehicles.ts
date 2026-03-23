@@ -82,7 +82,7 @@ export async function getFeaturedVehicles(): Promise<Vehicle[]> {
     `)
     .eq("deleted", false)
     .eq("status", "Em venda")
-    .eq("featured", true)
+    .order("featured", { ascending: false })
     .order("created_at", { ascending: false });
 
   if (error) {

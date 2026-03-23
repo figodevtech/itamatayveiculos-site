@@ -6,7 +6,6 @@ import { getFeaturedVehicles } from "@/lib/vehicles"
 
 export async function FeaturedVehicles() {
   const vehicles = await getFeaturedVehicles()
-  const featured = vehicles.slice(0, 4)
 
   return (
     <section className="bg-secondary/50 py-12 lg:py-16">
@@ -33,7 +32,7 @@ export async function FeaturedVehicles() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {featured.map((vehicle, index) => (
+          {vehicles.map((vehicle, index) => (
             <VehicleCard
               key={vehicle.id}
               vehicle={vehicle}
