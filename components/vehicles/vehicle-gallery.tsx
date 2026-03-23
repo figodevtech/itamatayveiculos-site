@@ -60,17 +60,17 @@ export function VehicleGallery({ images, alt }: VehicleGalleryProps) {
           <>
             <button
               onClick={goPrev}
-              className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-card/80 text-card-foreground opacity-0 shadow-lg backdrop-blur-sm transition-opacity group-hover:opacity-100"
+              className="absolute left-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white shadow-lg backdrop-blur-md border border-white/10 transition-all hover:bg-black/40 hover:scale-110 active:scale-95 md:opacity-0 md:group-hover:opacity-100"
               aria-label="Foto anterior"
             >
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-6 w-6 transition-transform group-hover:-translate-x-0.5" />
             </button>
             <button
               onClick={goNext}
-              className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-card/80 text-card-foreground opacity-0 shadow-lg backdrop-blur-sm transition-opacity group-hover:opacity-100"
+              className="absolute right-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/20 text-white shadow-lg backdrop-blur-md border border-white/10 transition-all hover:bg-black/40 hover:scale-110 active:scale-95 md:opacity-0 md:group-hover:opacity-100"
               aria-label="Proxima foto"
             >
-              <ChevronRight className="h-5 w-5" />
+              <ChevronRight className="h-6 w-6 transition-transform group-hover:translate-x-0.5" />
             </button>
           </>
         )}

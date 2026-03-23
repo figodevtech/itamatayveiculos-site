@@ -7,13 +7,13 @@ import {
   DoorOpen,
   Zap,
   Car,
-} from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import type { Vehicle } from "@/lib/vehicles"
-import { formatMileage } from "@/lib/vehicles"
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import type { Vehicle } from "@/lib/vehicles";
+import { formatMileage } from "@/lib/vehicles";
 
 interface VehicleSpecsProps {
-  vehicle: Vehicle
+  vehicle: Vehicle;
 }
 
 export function VehicleSpecs({ vehicle }: VehicleSpecsProps) {
@@ -26,27 +26,29 @@ export function VehicleSpecs({ vehicle }: VehicleSpecsProps) {
 
     ...(vehicle.mileage
       ? [
-        {
-          icon: Gauge,
-          label: "Quilometragem",
-          value: formatMileage(vehicle.mileage),
-        },
-      ]
+          {
+            icon: Gauge,
+            label: "Quilometragem",
+            value: formatMileage(vehicle.mileage),
+          },
+        ]
       : []),
 
-    ...(vehicle.engineSize ? [
-      {
-        icon: Zap,
-        label: "Motor",
-        value: `${vehicle.engineSize} - ${vehicle.horsepower}cv`,
-      }
-    ] : []),
+    ...(vehicle.engineSize
+      ? [
+          {
+            icon: Zap,
+            label: "Motor",
+            value: `${vehicle.engineSize} ${vehicle.horsepower ? `- ${vehicle.horsepower}cv` : ""}`,
+          },
+        ]
+      : []),
     { icon: Fuel, label: "Combustivel", value: vehicle.fuel },
     { icon: Settings, label: "Cambio", value: vehicle.transmission },
     { icon: Paintbrush, label: "Cor", value: vehicle.color },
     { icon: DoorOpen, label: "Portas", value: `${vehicle.doors} portas` },
     { icon: Car, label: "Carroceria", value: vehicle.bodyType },
-  ]
+  ];
 
   return (
     <Card className="border-border bg-card">
@@ -56,7 +58,7 @@ export function VehicleSpecs({ vehicle }: VehicleSpecsProps) {
         </h3>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {specs.map((spec) => {
-            const Icon = spec.icon
+            const Icon = spec.icon;
             return (
               <div key={spec.label} className="flex items-start gap-3">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
@@ -69,10 +71,10 @@ export function VehicleSpecs({ vehicle }: VehicleSpecsProps) {
                   </p>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
