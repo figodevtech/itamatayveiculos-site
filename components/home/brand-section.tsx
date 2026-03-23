@@ -1,23 +1,55 @@
-import React from "react"
-import Link from "next/link"
-import Image from "next/image"
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 interface Brand {
-  name: string
-  slug: string
-  logo?: string
+  name: string;
+  slug: string;
+  logo?: string;
 }
 
 const popularBrands: Brand[] = [
-  { name: "Toyota", slug: "Toyota", logo: "https://www.carlogos.org/car-logos/toyota-logo-2020-europe-640.png" },
-  { name: "Honda", slug: "Honda", logo: "https://www.carlogos.org/car-logos/honda-logo-2000-full-640.png" },
-  { name: "Volkswagen", slug: "Volkswagen", logo: "https://www.carlogos.org/logo/Volkswagen-logo-2019-1500x1500.png" },
-  { name: "Chevrolet", slug: "Chevrolet", logo: "https://www.carlogos.org/logo/Chevrolet-logo-2013-2560x1440.png" },
-  { name: "Hyundai", slug: "Hyundai", logo: "https://www.carlogos.org/car-logos/hyundai-logo-2011-download.png" },
-  { name: "Fiat", slug: "Fiat", logo: "https://www.carlogos.org/logo/Fiat-logo-2006-1920x1080.png" },
-  { name: "Jeep", slug: "Jeep", logo: "https://www.carlogos.org/car-logos/jeep-logo-1993-download.png" },
-  { name: "Nissan", slug: "Nissan", logo: "https://www.carlogos.org/car-logos/nissan-logo-2020-black.png" },
-]
+  {
+    name: "Toyota",
+    slug: "Toyota",
+    logo: "https://www.carlogos.org/car-logos/toyota-logo-2020-europe-640.png",
+  },
+  {
+    name: "Honda",
+    slug: "Honda",
+    logo: "https://www.carlogos.org/car-logos/honda-logo-2000-full-640.png",
+  },
+  {
+    name: "Volkswagen",
+    slug: "VW - VolksWagen",
+    logo: "https://www.carlogos.org/logo/Volkswagen-logo-2019-1500x1500.png",
+  },
+  {
+    name: "Chevrolet",
+    slug: "Chevrolet",
+    logo: "https://www.carlogos.org/logo/Chevrolet-logo-2013-2560x1440.png",
+  },
+  {
+    name: "Hyundai",
+    slug: "Hyundai",
+    logo: "https://www.carlogos.org/car-logos/hyundai-logo-2011-download.png",
+  },
+  {
+    name: "Fiat",
+    slug: "Fiat",
+    logo: "https://www.carlogos.org/logo/Fiat-logo-2006-1920x1080.png",
+  },
+  {
+    name: "Jeep",
+    slug: "Jeep",
+    logo: "https://www.carlogos.org/car-logos/jeep-logo-1993-download.png",
+  },
+  {
+    name: "Nissan",
+    slug: "Nissan",
+    logo: "https://www.carlogos.org/car-logos/nissan-logo-2020-black.png",
+  },
+];
 
 export function BrandSection() {
   return (
@@ -53,5 +85,5 @@ export function BrandSection() {
         ))}
       </div>
     </section>
-  )
+  );
 }

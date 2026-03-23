@@ -1,38 +1,37 @@
 import Link from "next/link"
 import { Car, Truck, Boxes } from "lucide-react"
+import { getBodyTypeCounts } from "@/services/vehicles"
 
-const bodyTypes = [
+const bodyTypesData = [
   {
     name: "Sedans",
     slug: "Sedan",
     icon: Car,
     description: "Conforto e elegancia para o dia a dia",
-    count: 0,
   },
   {
     name: "SUVs",
     slug: "SUV",
     icon: Boxes,
     description: "Versatilidade e espaco para a familia",
-    count: 0,
   },
   {
     name: "Hatchbacks",
     slug: "Hatch",
     icon: Car,
     description: "Compactos e economicos para a cidade",
-    count: 2,
   },
   {
     name: "Picapes",
     slug: "Picape",
     icon: Truck,
     description: "Forca e capacidade para trabalho e lazer",
-    count: 1,
   },
 ]
 
-export function BodyTypeSection() {
+export async function BodyTypeSection() {
+  const counts = await getBodyTypeCounts();
+
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 lg:px-6 lg:py-16">
       <h2 className="mb-8 font-mono text-2xl font-bold text-foreground">
@@ -40,8 +39,10 @@ export function BodyTypeSection() {
       </h2>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {bodyTypes.map((type) => {
+        {bodyTypesData.map((type) => {
           const Icon = type.icon
+          const count = counts[type.slug] || 0;
+
           return (
             <Link
               key={type.slug}
@@ -59,7 +60,7 @@ export function BodyTypeSection() {
                   {type.description}
                 </p>
                 <p className="mt-2 text-xs font-semibold text-primary">
-                  {type.count.toLocaleString("pt-BR")} ofertas
+                  {count.toLocaleString("pt-BR")} ofertas
                 </p>
               </div>
             </Link>

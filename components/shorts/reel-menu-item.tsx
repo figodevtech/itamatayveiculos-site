@@ -60,6 +60,7 @@ export function ReelMenuItem({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
+  const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showPlayIcon, setShowPlayIcon] = useState(false);
   const [showLikeAnimation, setShowLikeAnimation] = useState(false);
@@ -73,13 +74,33 @@ export function ReelMenuItem({
     const video = videoRef.current;
     if (!video) return;
 
+    let retryCount = 0;
+    const maxRetries = 3;
+
+    const attemptPlay = () => {
+      if (!shouldPlay) return;
+
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.warn("Autoplay was prevented or failed:", error);
+          setIsPlaying(false);
+          
+          // Retry logic
+          if (retryCount < maxRetries && shouldPlay) {
+            retryCount++;
+            setTimeout(attemptPlay, 500 * retryCount);
+          }
+        });
+      }
+    };
+
     if (shouldPlay) {
-      video.play().catch(() => {
-        // Autoplay was prevented
-        setIsPlaying(false);
-      });
+      attemptPlay();
     } else {
       video.pause();
+      // We DON'T reset hasStartedPlaying here anymore to keep the UI smooth 
+      // when scrolling back and forth, unless we want to force a reload.
     }
   }, [shouldPlay]);
 
@@ -99,27 +120,44 @@ export function ReelMenuItem({
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
     const handleWaiting = () => setIsBuffering(true);
-    const handleCanPlay = () => setIsBuffering(false);
+    const handlePlaying = () => {
+      setIsBuffering(false);
+      setHasStartedPlaying(true);
+    };
+    const handleCanPlay = () => {
+      setIsBuffering(false);
+      if (shouldPlay) {
+        video.play().catch(() => {});
+      }
+    };
     const handleTimeUpdate = () => {
       if (video.duration) {
         setProgress((video.currentTime / video.duration) * 100);
+      }
+      // If we are active and progress is moving, we have definitely started
+      if (video.currentTime > 0.1 && !hasStartedPlaying) {
+        setHasStartedPlaying(true);
       }
     };
 
     video.addEventListener("play", handlePlay);
     video.addEventListener("pause", handlePause);
     video.addEventListener("waiting", handleWaiting);
+    video.addEventListener("playing", handlePlaying);
     video.addEventListener("canplay", handleCanPlay);
+    video.addEventListener("canplaythrough", handleCanPlay);
     video.addEventListener("timeupdate", handleTimeUpdate);
 
     return () => {
       video.removeEventListener("play", handlePlay);
       video.removeEventListener("pause", handlePause);
       video.removeEventListener("waiting", handleWaiting);
+      video.removeEventListener("playing", handlePlaying);
       video.removeEventListener("canplay", handleCanPlay);
+      video.removeEventListener("canplaythrough", handleCanPlay);
       video.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, []);
+  }, [hasStartedPlaying, shouldPlay]);
 
   // Handle tap to play/pause
   const handleTap = useCallback(() => {
@@ -194,9 +232,11 @@ export function ReelMenuItem({
       {/* Video Layer */}
       <video
         ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover"
+        className={cn(
+          "absolute inset-0 w-full h-full object-cover transition-opacity duration-300",
+          hasStartedPlaying ? "opacity-100" : "opacity-0"
+        )}
         src={item.videoUrl}
-        poster={posterUrl}
         muted={isMuted}
         loop
         playsInline
@@ -204,6 +244,17 @@ export function ReelMenuItem({
         onClick={handleTap}
         aria-label={`Vídeo do veículo ${vehicleName}`}
       />
+
+      {/* Manual Thumbnail Overlay */}
+      {!hasStartedPlaying && (
+        <div
+          className="absolute inset-0 z-10 bg-cover bg-center"
+          style={{ backgroundImage: `url(${posterUrl})` }}
+        >
+          {/* Subtle blur for the background image during transition */}
+          <div className="absolute inset-0 bg-black/20" />
+        </div>
+      )}
 
       {/* Buffering Indicator */}
       {isBuffering && isActive && (
@@ -238,7 +289,7 @@ export function ReelMenuItem({
       )}
 
       {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
 
       {/* Progress Bar */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-white/20 z-30">

@@ -167,6 +167,28 @@ export async function getBodyTypes(): Promise<string[]> {
   return [...new Set(data.map(v => v.body_type))].sort();
 }
 
+export async function getBodyTypeCounts(): Promise<Record<string, number>> {
+  const { data, error } = await supabase
+    .from("vehicles")
+    .select("body_type")
+    .eq("deleted", false)
+    .eq("status", "Em venda");
+
+  if (error) {
+    console.error("Error fetching body type counts:", error);
+    return {};
+  }
+
+  const counts: Record<string, number> = {};
+  data.forEach((v: any) => {
+    if (v.body_type) {
+      counts[v.body_type] = (counts[v.body_type] || 0) + 1;
+    }
+  });
+
+  return counts;
+}
+
 export async function getFuelTypes(): Promise<string[]> {
   const { data } = await supabase.from("vehicles").select("fuel").eq("deleted", false);
   if (!data) return [];

@@ -1,9 +1,9 @@
-import Link from "next/link"
-import { User, Heart } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import { MobileMenu } from "./header/mobile-menu"
-import { ShortsButton } from "./shorts/shorts-button"
+import Link from "next/link";
+import { User, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { MobileMenu } from "./header/mobile-menu";
+import { ShortsButton } from "./shorts/shorts-button";
 
 export function Header() {
   return (
@@ -29,13 +29,15 @@ export function Header() {
             Comprar
           </Link>
           <Link
-            href="/veiculos"
+            target="_blank"
+            href={`https://api.whatsapp.com/send?phone=5583981415579`}
             className="text-sm font-medium text-black/80 transition-colors hover:text-black"
           >
             Vender
           </Link>
           <Link
-            href="/veiculos"
+            target="_blank"
+            href={`https://api.whatsapp.com/send?phone=5583981415579`}
             className="text-sm font-medium text-black/80 transition-colors hover:text-black"
           >
             Financiamento
@@ -81,5 +83,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }

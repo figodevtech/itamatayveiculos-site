@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function MobileMenu() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <>
@@ -33,14 +33,16 @@ export function MobileMenu() {
               Comprar
             </Link>
             <Link
-              href="/veiculos"
+              target="_blank"
+              href={`https://api.whatsapp.com/send?phone=5583981415579`}
               className="text-sm font-medium text-black/80 transition-colors hover:text-black"
               onClick={() => setMobileMenuOpen(false)}
             >
               Vender
             </Link>
             <Link
-              href="/veiculos"
+              target="_blank"
+              href={`https://api.whatsapp.com/send?phone=5583981415579`}
               className="text-sm font-medium text-black/80 transition-colors hover:text-black"
               onClick={() => setMobileMenuOpen(false)}
             >
@@ -71,5 +73,5 @@ export function MobileMenu() {
         </div>
       )}
     </>
-  )
+  );
 }
