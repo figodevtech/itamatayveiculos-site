@@ -60,7 +60,6 @@ export function ReelMenuItem({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
-  const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showPlayIcon, setShowPlayIcon] = useState(false);
   const [showLikeAnimation, setShowLikeAnimation] = useState(false);
@@ -122,7 +121,6 @@ export function ReelMenuItem({
     const handleWaiting = () => setIsBuffering(true);
     const handlePlaying = () => {
       setIsBuffering(false);
-      setHasStartedPlaying(true);
     };
     const handleCanPlay = () => {
       setIsBuffering(false);
@@ -135,8 +133,8 @@ export function ReelMenuItem({
         setProgress((video.currentTime / video.duration) * 100);
       }
       // If we are active and progress is moving, we have definitely started
-      if (video.currentTime > 0.1 && !hasStartedPlaying) {
-        setHasStartedPlaying(true);
+      if (video.currentTime > 0.1) {
+        setIsBuffering(false);
       }
     };
 
@@ -157,7 +155,29 @@ export function ReelMenuItem({
       video.removeEventListener("canplaythrough", handleCanPlay);
       video.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, [hasStartedPlaying, shouldPlay]);
+  }, [shouldPlay]);
+
+  // Safari/iOS Hardware Decoder Cleanup + React StrictMode Fix
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // In React 18 StrictMode, the component mounts, unmounts, and remounts.
+    // Our cleanup removes the 'src' from the DOM, but React's virtual DOM
+    // doesn't know this, so it doesn't re-apply it on remount.
+    // We must manually ensure the src is present when mounted.
+    if (video.getAttribute("src") !== item.videoUrl) {
+      video.setAttribute("src", item.videoUrl);
+      video.load();
+    }
+
+    return () => {
+      // Explictly release media resources when unmounted (not nearby)
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+    };
+  }, [item.videoUrl]);
 
   // Handle tap to play/pause
   const handleTap = useCallback(() => {
@@ -210,19 +230,12 @@ export function ReelMenuItem({
   };
 
   const vehicleName = `${item.vehicle.brand} ${item.vehicle.model} ${item.vehicle.version}`;
-  const posterUrl = item.vehicle.image || "";
 
-  // Render placeholder for non-nearby items
+  // Render simple placeholder for non-nearby items
   if (!isNearby && !isActive) {
     return (
-      <div className="h-full w-full snap-start snap-always relative flex items-center justify-center bg-black">
-        <div
-          className="absolute inset-0 bg-cover bg-center blur-sm opacity-60"
-          style={{ backgroundImage: `url(${posterUrl})` }}
-        />
-        <div className="relative z-10 text-center text-white">
-          <h3 className="text-xl font-bold">{vehicleName}</h3>
-        </div>
+      <div className="h-full w-full snap-start snap-always relative flex items-center justify-center bg-black text-white/40">
+        <h3 className="text-xl font-bold">{vehicleName}</h3>
       </div>
     );
   }
@@ -232,29 +245,16 @@ export function ReelMenuItem({
       {/* Video Layer */}
       <video
         ref={videoRef}
-        className={cn(
-          "absolute inset-0 w-full h-full object-cover transition-opacity duration-300",
-          hasStartedPlaying ? "opacity-100" : "opacity-0"
-        )}
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
         src={item.videoUrl}
         muted={isMuted}
         loop
         playsInline
-        preload={isActive ? "auto" : "metadata"}
+        autoPlay={isActive}
+        preload={isActive || isNearby ? "auto" : "metadata"}
         onClick={handleTap}
         aria-label={`Vídeo do veículo ${vehicleName}`}
       />
-
-      {/* Manual Thumbnail Overlay */}
-      {!hasStartedPlaying && (
-        <div
-          className="absolute inset-0 z-10 bg-cover bg-center"
-          style={{ backgroundImage: `url(${posterUrl})` }}
-        >
-          {/* Subtle blur for the background image during transition */}
-          <div className="absolute inset-0 bg-black/20" />
-        </div>
-      )}
 
       {/* Buffering Indicator */}
       {isBuffering && isActive && (
