@@ -23,18 +23,13 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-500 ease-in-out",
+        "sticky top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter,box-shadow] duration-300 ease-in-out will-change-[background-color,backdrop-filter,box-shadow]",
         isScrolled
-          ? "bg-white/50 backdrop-blur-sm border-b border-white/10 shadow-lg"
+          ? "bg-white/40 backdrop-blur-sm border-b border-white/10 shadow-lg"
           : "bg-white shadow-md",
       )}
     >
-      <div
-        className={cn(
-          "mx-auto flex items-center relative justify-center md:justify-between px-6 lg:px-10 transition-all duration-500",
-          isScrolled ? "py-2" : "py-3.5",
-        )}
-      >
+      <div className="mx-auto flex items-center relative justify-center md:justify-between px-6 lg:px-10 py-3">
         <MobileMenu />
 
         <Link href="/" className="flex items-center gap-2 flex-row">
