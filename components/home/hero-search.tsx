@@ -1,35 +1,35 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Search, Car, DollarSign, Calendar } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Search, Car, DollarSign, Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { getBrands } from "@/lib/vehicles"
+} from "@/components/ui/select";
+import { getBrands } from "@/lib/vehicles";
 
 export function HeroSearch() {
-  const router = useRouter()
-  const [brand, setBrand] = useState("")
-  const [priceRange, setPriceRange] = useState("")
-  const [yearRange, setYearRange] = useState("")
-  const [brandsList, setBrandsList] = useState<string[]>([])
-  
+  const router = useRouter();
+  const [brand, setBrand] = useState("");
+  const [priceRange, setPriceRange] = useState("");
+  const [yearRange, setYearRange] = useState("");
+  const [brandsList, setBrandsList] = useState<string[]>([]);
+
   useEffect(() => {
-    getBrands().then(setBrandsList)
-  }, [])
+    getBrands().then(setBrandsList);
+  }, []);
 
   function handleSearch() {
-    const params = new URLSearchParams()
-    if (brand) params.set("marca", brand)
-    if (priceRange) params.set("preco", priceRange)
-    if (yearRange) params.set("ano", yearRange)
-    router.push(`/veiculos?${params.toString()}`)
+    const params = new URLSearchParams();
+    if (brand) params.set("marca", brand);
+    if (priceRange) params.set("preco", priceRange);
+    if (yearRange) params.set("ano", yearRange);
+    router.push(`/veiculos?${params.toString()}`);
   }
 
   return (
@@ -52,7 +52,9 @@ export function HeroSearch() {
                 {brandsList.map((b) => (
                   <SelectItem
                     className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
-                    key={b} value={b}>
+                    key={b}
+                    value={b}
+                  >
                     {b}
                   </SelectItem>
                 ))}
@@ -173,12 +175,12 @@ export function HeroSearch() {
         <div className=" mt-5 flex flex-wrap items-center gap-6 border-t border-border pt-4 text-muted-foreground">
           <div className="flex items-center gap-2">
             <span className="font-mono font-bold text-card-foreground">
-              100+
+              500+
             </span>
-            <span className="text-sm">veiculos</span>
+            <span className="text-sm">vendas realizadas</span>
           </div>
           <div className="h-5 w-px bg-border" />
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <span className="font-mono font-bold text-card-foreground">
               10+
             </span>
@@ -190,9 +192,9 @@ export function HeroSearch() {
               7
             </span>
             <span className="text-sm">estados</span>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
-  )
+  );
 }
