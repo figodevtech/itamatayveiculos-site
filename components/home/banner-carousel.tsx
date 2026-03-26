@@ -12,26 +12,13 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Banner } from "@/types/banner";
 
-const bannerData = [
-  {
-    id: 1,
-    image: "/images/banners/qualidade2.webp",
-    alt: "qualidade",
-  },
-  {
-    id: 2,
-    image: "/images/banners/pneus2.webp",
-    alt: "feirao",
-  },
-  {
-    id: 3,
-    image: "/images/banners/moto.webp",
-    alt: "moto",
-  },
-];
+interface BannerCarouselProps {
+  banners: Banner[];
+}
 
-export function BannerCarousel() {
+export function BannerCarousel({ banners }: BannerCarouselProps) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
@@ -57,7 +44,7 @@ export function BannerCarousel() {
   // Timer logic: Resets on 'current' change (manual navigation)
   // and respects page visibility
   React.useEffect(() => {
-    if (!api) return;
+    if (!api || banners.length <= 1) return;
 
     let intervalId: NodeJS.Timeout | null = null;
 
@@ -94,7 +81,15 @@ export function BannerCarousel() {
       stopTimer();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [api, current]);
+  }, [api, current, banners.length]);
+
+  if (banners.length === 0) {
+    return (
+      <div className="w-full aspect-16/5 bg-muted flex items-center justify-center">
+        <span className="text-muted-foreground font-semibold text-lg drop-shadow-sm">Itamatay Veículos</span>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full relative group">
@@ -107,61 +102,79 @@ export function BannerCarousel() {
         }}
       >
         <CarouselContent className="ml-0">
-          {bannerData.map((item) => (
+          {banners.map((item, index) => (
             <CarouselItem key={item.id} className="pl-0">
               <div className="relative w-full aspect-16/5 overflow-hidden">
-                <Image
-                  src={item.image}
-                  alt={item.alt}
-                  fill
-                  className="object-cover object-center"
-                  priority={item.id === 1}
-                  sizes="100vw"
-                  quality={90}
-                />
+                {item.link ? (
+                  <a href={item.link} target="_blank" rel="noopener noreferrer">
+                    <Image
+                      src={item.image_url}
+                      alt={item.name}
+                      fill
+                      className="object-cover object-center"
+                      priority={index === 0}
+                      sizes="100vw"
+                      quality={90}
+                    />
+                  </a>
+                ) : (
+                  <Image
+                    src={item.image_url}
+                    alt={item.name}
+                    fill
+                    className="object-cover object-center"
+                    priority={index === 0}
+                    sizes="100vw"
+                    quality={90}
+                  />
+                )}
               </div>
             </CarouselItem>
           ))}
         </CarouselContent>
 
-        {/* Navigation Buttons */}
-        <div className="hidden md:block">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full border border-card/30 bg-foreground/20 text-card hover:bg-card/20 hover:text-card backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
-            onClick={() => api?.scrollPrev()}
-          >
-            <ArrowLeft className="h-6 w-6" />
-            <span className="sr-only">Anterior</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full border border-card/30 bg-foreground/20 text-card hover:bg-card/20 hover:text-card backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
-            onClick={() => api?.scrollNext()}
-          >
-            <ArrowRight className="h-6 w-6" />
-            <span className="sr-only">Proximo</span>
-          </Button>
-        </div>
+        {/* Navigation Buttons - Only show if more than one banner */}
+        {banners.length > 1 && (
+          <div className="hidden md:block">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full border border-card/30 bg-foreground/20 text-card hover:bg-card/20 hover:text-card backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={() => api?.scrollPrev()}
+            >
+              <ArrowLeft className="h-6 w-6" />
+              <span className="sr-only">Anterior</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full border border-card/30 bg-foreground/20 text-card hover:bg-card/20 hover:text-card backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={() => api?.scrollNext()}
+            >
+              <ArrowRight className="h-6 w-6" />
+              <span className="sr-only">Proximo</span>
+            </Button>
+          </div>
+        )}
 
-        {/* Dot indicators */}
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20">
-          {Array.from({ length: count }).map((_, index) => (
-            <button
-              key={index}
-              className={cn(
-                "h-2 rounded-full transition-all duration-300 shadow-sm",
-                current === index + 1
-                  ? "w-8 bg-card"
-                  : "w-2 bg-card/50 hover:bg-card/70",
-              )}
-              onClick={() => api?.scrollTo(index)}
-              aria-label={`Ir para slide ${index + 1}`}
-            />
-          ))}
-        </div>
+        {/* Dot indicators - Only show if more than one banner */}
+        {banners.length > 1 && (
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20">
+            {Array.from({ length: count }).map((_, index) => (
+              <button
+                key={index}
+                className={cn(
+                  "h-2 rounded-full transition-all duration-300 shadow-sm",
+                  current === index + 1
+                    ? "w-8 bg-card"
+                    : "w-2 bg-card/50 hover:bg-card/70",
+                )}
+                onClick={() => api?.scrollTo(index)}
+                aria-label={`Ir para slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </Carousel>
     </div>
   );

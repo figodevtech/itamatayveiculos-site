@@ -10,13 +10,16 @@ import { BrandSection } from "@/components/home/brand-section"
 import { FeaturedVehicles } from "@/components/home/featured-vehicles"
 import { BodyTypeSection } from "@/components/home/body-type-section"
 import { ShortsButton } from "@/components/shorts/shorts-button";
+import { getBanners } from "@/services/banners";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const banners = await getBanners();
+
   return (
     <div className="flex min-h-screen flex-col ">
       <Header />
       <main className="flex-1">
-        <BannerCarousel />
+        <BannerCarousel banners={banners} />
 
         {/* Mobile Shorts Banner */}
         <div className="md:hidden px-4 mt-4">
