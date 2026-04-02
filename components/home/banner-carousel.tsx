@@ -114,7 +114,7 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
                       className="object-cover object-center"
                       priority={index === 0}
                       sizes="100vw"
-                      quality={90}
+                      quality={75}
                     />
                   </a>
                 ) : (
@@ -125,7 +125,7 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
                     className="object-cover object-center"
                     priority={index === 0}
                     sizes="100vw"
-                    quality={90}
+                    quality={75}
                   />
                 )}
               </div>

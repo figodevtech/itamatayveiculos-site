@@ -41,20 +41,29 @@ export function VehicleGallery({ images, alt }: VehicleGalleryProps) {
     <div>
 
       <div className="group relative aspect-16/10 overflow-hidden rounded-xl bg-muted">
-        {images.map((img, index) => (
-          <Image
-            key={index}
-            src={img}
-            alt={`${alt} - Foto ${index + 1}`}
-            fill
-            className={`object-cover transition-opacity duration-300 ${
-              index === currentIndex ? "z-10 opacity-100" : "z-0 opacity-0 pointer-events-none"
-            }`}
-            priority={index === 0}
-            sizes="(max-width: 768px) 100vw, 864px"
-            quality={85}
-          />
-        ))}
+        {images.map((img, index) => {
+          const isCurrent = index === currentIndex;
+          const isPrev = index === (currentIndex === 0 ? images.length - 1 : currentIndex - 1);
+          const isNext = index === (currentIndex === images.length - 1 ? 0 : currentIndex + 1);
+          const shouldLoad = isCurrent || isPrev || isNext;
+
+          if (!shouldLoad) return null;
+
+          return (
+            <Image
+              key={index}
+              src={img}
+              alt={`${alt} - Foto ${index + 1}`}
+              fill
+              className={`object-cover transition-opacity duration-300 ${
+                isCurrent ? "z-10 opacity-100" : "z-0 opacity-0 pointer-events-none"
+              }`}
+              priority={index === 0}
+              sizes="(max-width: 768px) 100vw, 864px"
+              quality={75}
+            />
+          );
+        })}
 
         {images.length > 1 && (
           <>
