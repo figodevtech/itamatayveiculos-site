@@ -45,7 +45,9 @@ export async function getVehicles(): Promise<Vehicle[]> {
       )
     `)
     .eq("deleted", false)
-    .eq("status", "Em venda")
+    .in("status", ["Em venda", "Em breve"])
+    .order("featured", { ascending: false })
+    .order("status", { ascending: true })
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -81,8 +83,9 @@ export async function getFeaturedVehicles(): Promise<Vehicle[]> {
       )
     `)
     .eq("deleted", false)
-    .eq("status", "Em venda")
+    .in("status", ["Em venda", "Em breve"])
     .order("featured", { ascending: false })
+    .order("status", { ascending: true })
     .order("created_at", { ascending: false });
 
   if (error) {
