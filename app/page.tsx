@@ -11,15 +11,23 @@ import { FeaturedVehicles } from "@/components/home/featured-vehicles"
 import { BodyTypeSection } from "@/components/home/body-type-section"
 import { ShortsButton } from "@/components/shorts/shorts-button";
 import { getBanners } from "@/services/banners";
+import { getAppSettings } from "@/services/settings";
 
 export default async function HomePage() {
-  const banners = await getBanners();
+  const [banners, settings] = await Promise.all([
+    getBanners(),
+    getAppSettings(),
+  ]);
 
   return (
     <div className="flex min-h-screen flex-col ">
       <Header />
       <main className="flex-1">
-        <BannerCarousel banners={banners} />
+        <BannerCarousel 
+          banners={banners} 
+          interval={settings?.banner_interval}
+          duration={settings?.banner_duration}
+        />
 
         {/* Mobile Shorts Banner */}
         <div className="md:hidden px-4 mt-4">

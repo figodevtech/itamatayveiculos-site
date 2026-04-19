@@ -16,9 +16,15 @@ import { Banner } from "@/types/banner";
 
 interface BannerCarouselProps {
   banners: Banner[];
+  interval?: number;
+  duration?: number;
 }
 
-export function BannerCarousel({ banners }: BannerCarouselProps) {
+export function BannerCarousel({ 
+  banners, 
+  interval = 6, 
+  duration = 0.4 
+}: BannerCarouselProps) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
@@ -52,7 +58,7 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
       if (intervalId) clearInterval(intervalId);
       intervalId = setInterval(() => {
         api.scrollNext();
-      }, 6000);
+      }, interval * 1000);
     };
 
     const stopTimer = () => {
@@ -81,7 +87,7 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
       stopTimer();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [api, current, banners.length]);
+  }, [api, current, banners.length, interval]);
 
   if (banners.length === 0) {
     return (
@@ -98,7 +104,7 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
         className="w-full"
         opts={{
           loop: true,
-          duration: 40,
+          duration: duration * 100,
         }}
       >
         <CarouselContent className="ml-0">
