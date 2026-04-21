@@ -205,19 +205,17 @@ export default async function VehicleDetailPage({
                         {/* <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
                           Ver telefone
                         </Button> */}
-                        {vehicle.message && (
-                          <Link
-                            target="_blank"
-                            href={`https://api.whatsapp.com/send?phone=5583981415579&text=${vehicle.message}`}
+                        <Link
+                          target="_blank"
+                          href={`https://api.whatsapp.com/send?phone=5583981415579&text=Olá, gostaria de saber mais sobre o veículo ${vehicle.brand} ${vehicle.model} ${vehicle.year} versão ${vehicle.version}`}
+                        >
+                          <Button
+                            variant="outline"
+                            className="w-full border-accent text-accent hover:bg-accent/10"
                           >
-                            <Button
-                              variant="outline"
-                              className="w-full border-accent text-accent hover:bg-accent/10"
-                            >
-                              Enviar mensagem
-                            </Button>
-                          </Link>
-                        )}
+                            Enviar mensagem
+                          </Button>
+                        </Link>
                         <div className="mt-4 flex items-center gap-2 rounded-lg bg-secondary p-3">
                           <Shield className="h-5 w-5 shrink-0 text-primary" />
                           <span className="text-xs text-muted-foreground">

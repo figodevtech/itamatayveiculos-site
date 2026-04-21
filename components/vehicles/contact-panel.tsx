@@ -39,35 +39,20 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
               <Phone className="mr-2 h-4 w-4" />
               Ver telefone
             </Button> */}
-            {vehicle.message ? (
-              <Link
-                target="_blank"
-                href={`https://api.whatsapp.com/send?phone=5583981415579&text=${vehicle.message}`}
+            <Link
+              target="_blank"
+              href={`https://api.whatsapp.com/send?phone=5583981415579&text=Olá, gostaria de saber mais sobre o veículo ${vehicle.brand} ${vehicle.model} ${vehicle.year} versão ${vehicle.version}`}
+            >
+              <Button
+                variant="outline"
+                className="hover:text-accent hover:cursor-pointer w-full border-accent text-accent hover:bg-accent/10"
+                size="lg"
               >
-                <Button
-                  variant="outline"
-                  className="hover:text-accent hover:cursor-pointer w-full border-accent text-accent hover:bg-accent/10"
-                  size="lg"
-                >
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Enviar mensagem
-                </Button>
-              </Link>
-            ) : (
-              <Link
-                target="_blank"
-                href={`https://api.whatsapp.com/send?phone=5583981415579`}
-              >
-                <Button
-                  variant="outline"
-                  className="hover:text-accent hover:cursor-pointer w-full border-accent text-accent hover:bg-accent/10"
-                  size="lg"
-                >
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Enviar mensagem
-                </Button>
-              </Link>
-            )}
+                <MessageCircle className="mr-2 h-4 w-4" />
+                Enviar mensagem
+              </Button>
+            </Link>
+
           </div>
 
           <div className="mt-4 flex items-center gap-2 rounded-lg bg-secondary p-3">
