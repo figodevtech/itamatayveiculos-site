@@ -58,7 +58,7 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
           <div className="mt-4 flex items-center gap-2 rounded-lg bg-secondary p-3">
             <Shield className="h-5 w-5 shrink-0 text-primary" />
             <span className="text-xs text-muted-foreground">
-              Negociacao protegida pela Itamatay Veículos. Compre com seguranca.
+              Negociação protegida pela Itamatay Veículos. Compre com segurança.
             </span>
           </div>
         </CardContent>
@@ -73,7 +73,7 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
               </p>
               <p className="text-xs text-muted-foreground">
                 {vehicle.sellerType === "dealership"
-                  ? "Concessionaria"
+                  ? "Concessionária"
                   : vehicle.sellerType === "store"
                     ? "Loja"
                     : "Particular"}
@@ -148,7 +148,7 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
               placeholder="Escreva sua mensagem..."
               className="bg-secondary text-secondary-foreground"
               rows={3}
-              defaultValue={`Ola, tenho interesse no ${vehicle.brand} ${vehicle.model} ${vehicle.version}.`}
+              defaultValue={`Olá, tenho interesse no ${vehicle.brand} ${vehicle.model} ${vehicle.version}.`}
             />
             <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
               Enviar proposta

@@ -35,7 +35,7 @@ export function VehicleCard({ vehicle, priority }: VehicleCardProps) {
               className="bg-card/90 text-card-foreground backdrop-blur-sm"
             >
               {vehicle.sellerType === "dealership"
-                ? "Concessionaria"
+                ? "Concessionária"
                 : vehicle.sellerType === "store"
                   ? "Loja"
                   : "Particular"}

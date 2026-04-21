@@ -7,25 +7,25 @@ const bodyTypesData = [
     name: "Sedans",
     slug: "Sedan",
     icon: Car,
-    description: "Conforto e elegancia para o dia a dia",
+    description: "Conforto e elegância para o dia a dia",
   },
   {
     name: "SUVs",
     slug: "SUV",
     icon: Boxes,
-    description: "Versatilidade e espaco para a familia",
+    description: "Versatilidade e espaço para a família",
   },
   {
     name: "Hatchbacks",
     slug: "Hatch",
     icon: Car,
-    description: "Compactos e economicos para a cidade",
+    description: "Compactos e econômicos para a cidade",
   },
   {
     name: "Picapes",
     slug: "Picape",
     icon: Truck,
-    description: "Forca e capacidade para trabalho e lazer",
+    description: "Força e capacidade para trabalho e lazer",
   },
 ]
 

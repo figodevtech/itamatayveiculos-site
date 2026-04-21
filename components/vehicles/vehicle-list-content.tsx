@@ -83,10 +83,10 @@ export function VehicleListContent({
     <div className="mx-auto max-w-7xl px-4 py-6 lg:px-6 lg:py-8">
       <div className="mb-6">
         <h1 className="font-mono text-2xl font-bold text-foreground md:text-3xl">
-          Veiculos a venda
+          Veículos à venda
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          {initialVehicles.length} veiculos encontrados
+          {initialVehicles.length} veículos encontrados
         </p>
       </div>
 
@@ -136,8 +136,8 @@ export function VehicleListContent({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="relevance">Mais relevantes</SelectItem>
-              <SelectItem value="price-asc">Menor preco</SelectItem>
-              <SelectItem value="price-desc">Maior preco</SelectItem>
+              <SelectItem value="price-asc">Menor preço</SelectItem>
+              <SelectItem value="price-desc">Maior preço</SelectItem>
               <SelectItem value="year-desc">Ano mais novo</SelectItem>
               <SelectItem value="mileage-asc">Menor km</SelectItem>
             </SelectContent>
@@ -194,7 +194,7 @@ export function VehicleListContent({
           ) : (
             <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-card py-20">
               <p className="font-mono text-lg font-bold text-foreground">
-                Nenhum veiculo encontrado
+                Nenhum veículo encontrado
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
                 Tente ajustar os filtros para encontrar mais resultados.

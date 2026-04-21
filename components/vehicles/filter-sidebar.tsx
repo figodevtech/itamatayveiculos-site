@@ -123,7 +123,7 @@ export function FilterSidebar({
 
       <div>
         <Label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Combustivel
+          Combustível
         </Label>
         <div className="flex flex-col gap-2">
           {fuelTypes.map((fuel) => (
@@ -145,7 +145,7 @@ export function FilterSidebar({
 
       <div>
         <Label className="mb-3 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Faixa de preco
+          Faixa de preço
         </Label>
         <Slider
           value={filters.priceRange}

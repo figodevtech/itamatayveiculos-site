@@ -41,7 +41,7 @@ interface VehicleDetailPageProps {
 export async function generateMetadata({ params }: VehicleDetailPageProps) {
   const { id } = await params;
   const vehicle = await getVehicleById(id);
-  if (!vehicle) return { title: "Veiculo nao encontrado" };
+  if (!vehicle) return { title: "Veículo não encontrado" };
   return {
     title: `${vehicle.brand} ${vehicle.model} ${vehicle.version} - Itamatay Veículos`,
     description: vehicle.description,
@@ -78,11 +78,11 @@ export default async function VehicleDetailPage({
         <div className="mx-auto max-w-7xl px-4 py-4 lg:px-6">
           <nav className="flex items-center gap-1 text-xs text-muted-foreground">
             <Link href="/" className="hover:text-foreground">
-              Inicio
+              Início
             </Link>
             <ChevronRight className="h-3 w-3" />
             <Link href="/veiculos" className="hover:text-foreground">
-              Veiculos
+              Veículos
             </Link>
             <ChevronRight className="h-3 w-3" />
             <Link
@@ -106,7 +106,7 @@ export default async function VehicleDetailPage({
                   className="bg-primary/10 text-primary"
                 >
                   {vehicle.sellerType === "dealership"
-                    ? "Concessionaria"
+                    ? "Concessionária"
                     : vehicle.sellerType === "store"
                       ? "Loja"
                       : "Particular"}
@@ -219,8 +219,8 @@ export default async function VehicleDetailPage({
                         <div className="mt-4 flex items-center gap-2 rounded-lg bg-secondary p-3">
                           <Shield className="h-5 w-5 shrink-0 text-primary" />
                           <span className="text-xs text-muted-foreground">
-                            Negociacao protegida pela Itamatay Veículos. Compre
-                            com seguranca.
+                            Negociação protegida pela Itamatay Veículos. Compre
+                            com segurança.
                           </span>
                         </div>
                       </div>
@@ -236,7 +236,7 @@ export default async function VehicleDetailPage({
                           </p>
                           <p className="text-xs text-muted-foreground">
                             {vehicle.sellerType === "dealership"
-                              ? "Concessionaria"
+                              ? "Concessionária"
                               : vehicle.sellerType === "store"
                                 ? "Loja"
                                 : "Particular"}
@@ -298,7 +298,7 @@ export default async function VehicleDetailPage({
                 <Card className="border-border bg-card">
                   <CardContent className="p-5">
                     <h3 className="mb-3 font-mono text-lg font-bold text-card-foreground">
-                      Descricao do anuncio
+                      Descrição do anúncio
                     </h3>
                     <p className="leading-relaxed text-muted-foreground">
                       {vehicle.description}
@@ -313,7 +313,7 @@ export default async function VehicleDetailPage({
                 <Card className="border-border bg-card">
                   <CardContent className="p-5">
                     <h3 className="mb-4 font-mono text-lg font-bold text-card-foreground">
-                      Itens do veiculo
+                      Itens do veículo
                     </h3>
                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                       {vehicle.features.map((feature) => (
@@ -343,7 +343,7 @@ export default async function VehicleDetailPage({
           {relatedVehicles.length > 0 && (
             <section className="mt-12">
               <h2 className="mb-6 font-mono text-xl font-bold text-foreground">
-                Veiculos similares
+                Veículos similares
               </h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {relatedVehicles.map((v) => (

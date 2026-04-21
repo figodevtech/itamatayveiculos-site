@@ -12,8 +12,8 @@ export function Footer() {
               <span className="font-mono text-lg font-bold">Itamatay Veículos</span>
             </Link>
             <p className="text-sm leading-relaxed text-primary-foreground/70">
-              O maior marketplace de veiculos do Brasil. Encontre o carro dos
-              seus sonhos com seguranca e facilidade.
+              O maior marketplace de veículos do Brasil. Encontre o carro dos
+              seus sonhos com segurança e facilidade.
             </p>
           </div>
 
@@ -59,7 +59,7 @@ export function Footer() {
 
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider">
-              Servicos
+              Serviços
             </h3>
             <ul className="flex flex-col gap-2">
               <li>
@@ -107,7 +107,7 @@ export function Footer() {
                   href=""
                   className="text-sm text-primary-foreground/70 transition-colors hover:text-primary-foreground"
                 >
-                  Sobre nos
+                  Sobre nós
                 </Link>
               </li>
               <li>
@@ -132,7 +132,7 @@ export function Footer() {
                   href=""
                   className="text-sm text-primary-foreground/70 transition-colors hover:text-primary-foreground"
                 >
-                  Politica de privacidade
+                  Política de privacidade
                 </Link>
               </li>
             </ul>

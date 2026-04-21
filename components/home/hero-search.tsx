@@ -65,18 +65,18 @@ export function HeroSearch() {
           <div className="flex-1">
             <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               <DollarSign className="h-3.5 w-3.5" />
-              Faixa de preco
+              Faixa de preço
             </label>
             <Select value={priceRange} onValueChange={setPriceRange}>
               <SelectTrigger className="w-full bg-secondary text-secondary-foreground">
-                <SelectValue placeholder="Qualquer preco" />
+                <SelectValue placeholder="Qualquer preço" />
               </SelectTrigger>
               <SelectContent position="popper">
                 <SelectItem
                   className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
                   value="0-80000"
                 >
-                  Ate R$ 80.000
+                  Até R$ 80.000
                 </SelectItem>
                 <SelectItem
                   className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
