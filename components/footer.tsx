@@ -144,7 +144,7 @@ export function Footer() {
             2026 Itamatay Veículos. Todos os direitos reservados.
           </p>
           <p className="text-center text-xs text-primary-foreground/50">
-            Powered By FIGO</p>
+            Powered By <Link className="underline" href="https://figosoftwares.com.br" target="_blank" rel="noopener noreferrer">FIGO</Link></p>
         </div>
       </div>
     </footer>
