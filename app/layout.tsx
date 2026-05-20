@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next';
+import { UserConfigProvider } from "@/contexts/user-config";
 import { Toaster } from "@/components/ui/sonner"
+import { getAppSettings } from "@/services/settings";
 import './globals.css'
 
 const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -34,15 +36,17 @@ export const viewport: Viewport = {
   themeColor: '#1a2744',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const settings = await getAppSettings();
+
   return (
     <html lang="pt-BR">
       <body className={`${_inter.variable} ${_spaceGrotesk.variable} font-sans antialiased`}>
-        {children}
+        <UserConfigProvider settings={settings}>{children}</UserConfigProvider>
         <Toaster />
         <Analytics />
       </body>

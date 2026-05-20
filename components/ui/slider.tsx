@@ -5,14 +5,25 @@ import { Slider as SliderPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
 
+type SliderProps = React.ComponentProps<typeof SliderPrimitive.Root> & {
+  rangeClassName?: string
+  rangeStyle?: React.CSSProperties
+  thumbClassName?: string
+  thumbStyle?: React.CSSProperties
+}
+
 function Slider({
   className,
   defaultValue,
   value,
   min = 0,
   max = 100,
+  rangeClassName,
+  rangeStyle,
+  thumbClassName,
+  thumbStyle,
   ...props
-}: React.ComponentProps<typeof SliderPrimitive.Root>) {
+}: SliderProps) {
   const _values = React.useMemo(
     () =>
       Array.isArray(value)
@@ -45,15 +56,21 @@ function Slider({
         <SliderPrimitive.Range
           data-slot="slider-range"
           className={cn(
-            "absolute bg-primary data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
+            "absolute bg-primary data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full",
+            rangeClassName
           )}
+          style={rangeStyle}
         />
       </SliderPrimitive.Track>
       {Array.from({ length: _values.length }, (_, index) => (
         <SliderPrimitive.Thumb
           data-slot="slider-thumb"
           key={index}
-          className="block size-4 shrink-0 rounded-full border border-primary bg-white shadow-sm ring-ring/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+          className={cn(
+            "block size-4 shrink-0 rounded-full border border-primary bg-white shadow-sm ring-ring/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50",
+            thumbClassName
+          )}
+          style={thumbStyle}
         />
       ))}
     </SliderPrimitive.Root>

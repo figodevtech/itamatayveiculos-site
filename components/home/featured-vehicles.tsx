@@ -1,11 +1,21 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VehicleCard } from "@/components/vehicle-card";
 import { getFeaturedVehicles } from "@/lib/vehicles";
+import { getAppSettings } from "@/services/settings";
 
 export async function FeaturedVehicles() {
-  const vehicles = await getFeaturedVehicles();
+  const [vehicles, settings] = await Promise.all([
+    getFeaturedVehicles(),
+    getAppSettings(),
+  ]);
+  const primaryColorStyle = settings?.primary_color
+    ? ({
+        "--featured-primary": settings.primary_color,
+      } as CSSProperties)
+    : undefined;
 
   return (
     <section className="bg-secondary/50 py-12 lg:py-16">
@@ -21,7 +31,8 @@ export async function FeaturedVehicles() {
           </div>
           <Button
             variant="ghost"
-            className="hidden text-primary md:flex"
+            className="hidden text-primary hover:bg-[var(--featured-primary)] hover:text-white md:flex"
+            style={primaryColorStyle}
             asChild
           >
             <Link href="/veiculos">
@@ -37,6 +48,7 @@ export async function FeaturedVehicles() {
               key={vehicle.id}
               vehicle={vehicle}
               priority={index < 2}
+              primaryColor={settings?.primary_color}
             />
           ))}
         </div>

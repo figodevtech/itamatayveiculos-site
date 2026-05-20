@@ -9,9 +9,11 @@ import { formatPrice, formatMileage } from "@/lib/vehicles";
 interface VehicleCardProps {
   vehicle: Vehicle;
   priority?: boolean;
+  primaryColor?: string;
 }
 
-export function VehicleCard({ vehicle, priority }: VehicleCardProps) {
+
+export function VehicleCard({ vehicle, priority, primaryColor }: VehicleCardProps) {
   return (
     <Link href={`/veiculos/${vehicle.id}`}>
       <Card className="group pt-0 overflow-hidden border-border bg-card transition-all hover:shadow-lg h-full">
@@ -45,7 +47,10 @@ export function VehicleCard({ vehicle, priority }: VehicleCardProps) {
             <div className="absolute left-3 top-3">
               <Badge
                 variant="secondary"
-                className="bg-pink-800/70 backdrop-blur-sm text-white"
+                className={`${primaryColor ? "" : "bg-primary"} backdrop-blur-sm text-white`}
+                style={
+                  primaryColor ? { backgroundColor: primaryColor } : undefined
+                }
               >
                 <Star className="h-3.5 w-3.5 shrink-0" /> Destaque
               </Badge>

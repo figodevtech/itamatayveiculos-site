@@ -31,6 +31,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { AIDescriptionBox } from "@/components/vehicles/ai-description";
+import { getAppSettings } from "@/services/settings";
 
 export const revalidate = 0;
 
@@ -58,9 +59,11 @@ export default async function VehicleDetailPage({
     notFound();
   }
 
-  const shortVideo = await getShortByVehicleId(id);
-
-  const allVehicles = await getVehicles();
+  const [shortVideo, allVehicles, settings] = await Promise.all([
+    getShortByVehicleId(id),
+    getVehicles(),
+    getAppSettings(),
+  ]);
 
   const relatedVehicles = allVehicles
     .filter(
@@ -347,7 +350,11 @@ export default async function VehicleDetailPage({
               </h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {relatedVehicles.map((v) => (
-                  <VehicleCard key={v.id} vehicle={v} />
+                  <VehicleCard
+                    key={v.id}
+                    vehicle={v}
+                    primaryColor={settings?.primary_color}
+                  />
                 ))}
               </div>
             </section>

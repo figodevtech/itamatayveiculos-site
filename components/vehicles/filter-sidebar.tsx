@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useUserConfig } from "@/contexts/user-config";
 import { getBrands, getBodyTypes, getFuelTypes } from "@/lib/vehicles";
 import { useEffect, useState } from "react";
 
@@ -38,9 +39,22 @@ export function FilterSidebar({
   onClose,
   resultCount,
 }: FilterSidebarProps) {
+  const { primaryColor } = useUserConfig();
   const [brands, setBrands] = useState<string[]>([]);
   const [bodyTypes, setBodyTypes] = useState<string[]>([]);
   const [fuelTypes, setFuelTypes] = useState<string[]>([]);
+  const filterPriceRangeKey = filters.priceRange.join(":");
+  const [draftPriceRange, setDraftPriceRange] = useState<{
+    key: string;
+    value: [number, number];
+  }>({
+    key: filterPriceRangeKey,
+    value: filters.priceRange,
+  });
+  const priceRange =
+    draftPriceRange.key === filterPriceRangeKey
+      ? draftPriceRange.value
+      : filters.priceRange;
 
   useEffect(() => {
     Promise.all([
@@ -53,6 +67,23 @@ export function FilterSidebar({
       setFuelTypes(fetchedFuelTypes);
     });
   }, []);
+
+  function handlePriceRangeChange(value: number[]) {
+    setDraftPriceRange({
+      key: filterPriceRangeKey,
+      value: [
+        value[0] ?? filters.priceRange[0],
+        value[1] ?? filters.priceRange[1],
+      ],
+    });
+  }
+
+  function handlePriceRangeCommit(value: number[]) {
+    onFilterChange("priceRange", [
+      value[0] ?? filters.priceRange[0],
+      value[1] ?? filters.priceRange[1],
+    ]);
+  }
 
   return (
     <aside className="flex flex-col gap-6">
@@ -148,16 +179,21 @@ export function FilterSidebar({
           Faixa de preço
         </Label>
         <Slider
-          value={filters.priceRange}
+          value={priceRange}
           min={0}
           max={400000}
-          step={10000}
-          onValueChange={(v) => onFilterChange("priceRange", v)}
+          step={1000}
+          onValueChange={handlePriceRangeChange}
+          onValueCommit={handlePriceRangeCommit}
+          rangeStyle={
+            primaryColor ? { backgroundColor: primaryColor } : undefined
+          }
+          thumbStyle={primaryColor ? { borderColor: primaryColor } : undefined}
           className="mb-2"
         />
         <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>R$ {filters.priceRange[0].toLocaleString("pt-BR")}</span>
-          <span>R$ {filters.priceRange[1].toLocaleString("pt-BR")}</span>
+          <span>R$ {priceRange[0].toLocaleString("pt-BR")}</span>
+          <span>R$ {priceRange[1].toLocaleString("pt-BR")}</span>
         </div>
       </div>
 

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { VehicleCard } from "@/components/vehicle-card";
 import { FilterSidebar } from "@/components/vehicles/filter-sidebar";
+import { useUserConfig } from "@/contexts/user-config";
 import type { Vehicle } from "@/lib/vehicles";
 
 interface VehicleListContentProps {
@@ -24,6 +25,7 @@ export function VehicleListContent({
 }: VehicleListContentProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { primaryColor } = useUserConfig();
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -44,7 +46,7 @@ export function VehicleListContent({
     (key: string, value: unknown) => {
       const params = new URLSearchParams(searchParams.toString());
 
-      let newValue = value as string;
+      const newValue = value as string;
       if (key === "priceRange") {
         const range = value as [number, number];
         params.set("precoMin", range[0].toString());
@@ -107,10 +109,16 @@ export function VehicleListContent({
               onClick={() => setViewMode("grid")}
               className={`rounded-md p-1.5 transition-colors ${
                 viewMode === "grid"
-                  ? "bg-primary text-primary-foreground"
+                  ? `${primaryColor ? "" : "bg-primary"} text-primary-foreground`
                   : "text-muted-foreground hover:text-foreground"
               }`}
+              style={
+                viewMode === "grid" && primaryColor
+                  ? { backgroundColor: primaryColor }
+                  : undefined
+              }
               aria-label="Visualizar em grade"
+              aria-pressed={viewMode === "grid"}
             >
               <Grid3X3 className="h-4 w-4" />
             </button>
@@ -118,10 +126,16 @@ export function VehicleListContent({
               onClick={() => setViewMode("list")}
               className={`rounded-md p-1.5 transition-colors ${
                 viewMode === "list"
-                  ? "bg-primary text-primary-foreground"
+                  ? `${primaryColor ? "" : "bg-primary"} text-primary-foreground`
                   : "text-muted-foreground hover:text-foreground"
               }`}
+              style={
+                viewMode === "list" && primaryColor
+                  ? { backgroundColor: primaryColor }
+                  : undefined
+              }
               aria-label="Visualizar em lista"
+              aria-pressed={viewMode === "list"}
             >
               <List className="h-4 w-4" />
             </button>
@@ -188,7 +202,11 @@ export function VehicleListContent({
               }
             >
               {initialVehicles.map((vehicle) => (
-                <VehicleCard key={vehicle.id} vehicle={vehicle} />
+                <VehicleCard
+                  key={vehicle.id}
+                  vehicle={vehicle}
+                  primaryColor={primaryColor}
+                />
               ))}
             </div>
           ) : (
