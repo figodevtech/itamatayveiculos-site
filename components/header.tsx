@@ -47,14 +47,14 @@ export function Header() {
             href="/veiculos"
             className="text-sm font-medium text-black/80 transition-colors hover:text-black"
           >
-            Comprar
+            Veículos
           </Link>
+          
           <Link
-            target="_blank"
-            href={`https://api.whatsapp.com/send?phone=5583981415579`}
+            href="/veiculos/repasses"
             className="text-sm font-medium text-black/80 transition-colors hover:text-black"
           >
-            Vender
+            Repasses
           </Link>
           <Link
             target="_blank"
@@ -62,6 +62,13 @@ export function Header() {
             className="text-sm font-medium text-black/80 transition-colors hover:text-black"
           >
             Financiamento
+          </Link>
+          <Link
+            target="_blank"
+            href={`https://api.whatsapp.com/send?phone=5583981415579`}
+            className="text-sm font-medium text-black/80 transition-colors hover:text-black"
+          >
+            Vender
           </Link>
           <Link
             href="/shorts"

@@ -41,6 +41,13 @@ export function MobileMenu() {
               Vender
             </Link>
             <Link
+              href="/veiculos/repasses"
+              className="text-sm font-medium text-black/80 transition-colors hover:text-black"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Repasses
+            </Link>
+            <Link
               target="_blank"
               href={`https://api.whatsapp.com/send?phone=5583981415579`}
               className="text-sm font-medium text-black/80 transition-colors hover:text-black"

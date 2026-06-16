@@ -18,10 +18,14 @@ import type { Vehicle } from "@/lib/vehicles";
 
 interface VehicleListContentProps {
   initialVehicles: Vehicle[];
+  basePath?: string;
+  title?: string;
 }
 
 export function VehicleListContent({
   initialVehicles,
+  basePath = "/veiculos",
+  title = "Veículos à venda",
 }: VehicleListContentProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -72,20 +76,21 @@ export function VehicleListContent({
         }
       }
 
-      router.push(`/veiculos?${params.toString()}`, { scroll: false });
+      const queryString = params.toString();
+      router.push(queryString ? `${basePath}?${queryString}` : basePath, { scroll: false });
     },
-    [router, searchParams],
+    [basePath, router, searchParams],
   );
 
   const handleClearFilters = useCallback(() => {
-    router.push("/veiculos", { scroll: false });
-  }, [router]);
+    router.push(basePath, { scroll: false });
+  }, [basePath, router]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 lg:px-6 lg:py-8">
       <div className="mb-6">
         <h1 className="font-mono text-2xl font-bold text-foreground md:text-3xl">
-          Veículos à venda
+          {title}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {initialVehicles.length} veículos encontrados
