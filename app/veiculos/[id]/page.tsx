@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
@@ -7,8 +8,6 @@ import {
   Check,
   Star,
   Shield,
-  Pin,
-  Locate,
   MapPin,
   Play,
 } from "lucide-react";
@@ -28,8 +27,6 @@ import { getShortByVehicleId } from "@/services/shorts";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { AIDescriptionBox } from "@/components/vehicles/ai-description";
 import { getAppSettings } from "@/services/settings";
 
@@ -39,13 +36,95 @@ interface VehicleDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-export async function generateMetadata({ params }: VehicleDetailPageProps) {
+const SITE_NAME = "Itamatay Veiculos";
+const DEFAULT_SITE_URL = "https://itamatayveiculos.com.br";
+const DEFAULT_OG_IMAGE = "/images/logos/itamatay-logo.png";
+
+function getSiteUrl() {
+  const configuredUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ||
+    process.env.VERCEL_URL;
+
+  if (!configuredUrl) {
+    return new URL(DEFAULT_SITE_URL);
+  }
+
+  return new URL(
+    configuredUrl.startsWith("http") ? configuredUrl : `https://${configuredUrl}`,
+  );
+}
+
+function getAbsoluteUrl(url: string, baseUrl: URL) {
+  try {
+    return new URL(url, baseUrl).toString();
+  } catch {
+    return new URL(DEFAULT_OG_IMAGE, baseUrl).toString();
+  }
+}
+
+function truncateDescription(description: string, maxLength = 180) {
+  const normalized = description.replace(/\s+/g, " ").trim();
+
+  if (normalized.length <= maxLength) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, maxLength - 1).trim()}...`;
+}
+
+export async function generateMetadata({
+  params,
+}: VehicleDetailPageProps): Promise<Metadata> {
   const { id } = await params;
   const vehicle = await getVehicleById(id);
-  if (!vehicle) return { title: "Veículo não encontrado" };
+
+  if (!vehicle) return { title: "Veiculo nao encontrado" };
+
+  const siteUrl = getSiteUrl();
+  const vehicleUrl = new URL(`/veiculos/${vehicle.id}`, siteUrl).toString();
+  const imageUrl = getAbsoluteUrl(vehicle.image || DEFAULT_OG_IMAGE, siteUrl);
+  const title = `${vehicle.brand} ${vehicle.model} ${vehicle.version} ${vehicle.year}/${vehicle.yearModel} - ${SITE_NAME}`;
+  const description = truncateDescription(
+    vehicle.description ||
+      `${vehicle.brand} ${vehicle.model} ${vehicle.version} disponivel na ${SITE_NAME}.`,
+  );
+
   return {
-    title: `${vehicle.brand} ${vehicle.model} ${vehicle.version} - Itamatay Veículos`,
-    description: vehicle.description,
+    title,
+    description,
+    alternates: {
+      canonical: vehicleUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: vehicleUrl,
+      siteName: SITE_NAME,
+      type: "article",
+      locale: "pt_BR",
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${vehicle.brand} ${vehicle.model} ${vehicle.version}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
+    other: {
+      "product:price:amount": String(vehicle.price),
+      "product:price:currency": "BRL",
+      "product:availability":
+        vehicle.status === "Vendido" ? "out of stock" : "in stock",
+    },
   };
 }
 
