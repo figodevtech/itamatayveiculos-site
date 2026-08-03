@@ -8,8 +8,8 @@ import { BannerCarousel } from "@/components/home/banner-carousel"
 import { HeroSearch } from "@/components/home/hero-search"
 import { BrandSection } from "@/components/home/brand-section"
 import { FeaturedVehicles } from "@/components/home/featured-vehicles"
+import { ServicesShowcase } from "@/components/home/services-showcase"
 import { BodyTypeSection } from "@/components/home/body-type-section"
-import { ShortsButton } from "@/components/shorts/shorts-button";
 import { getBanners } from "@/services/banners";
 import { getAppSettings } from "@/services/settings";
 
@@ -61,6 +61,7 @@ export default async function HomePage() {
           <BrandSection />
         </div>
         <FeaturedVehicles />
+        <ServicesShowcase />
         <BodyTypeSection />
       </main>
       <Footer />
