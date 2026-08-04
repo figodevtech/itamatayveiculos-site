@@ -27,7 +27,7 @@ export async function getShortsVideos(): Promise<ShortVideo[]> {
     return [];
   }
 
-  return (data || []).map((row: any) => ({
+  return (data || []).map((row) => ({
     id: row.id,
     vehicle_id: row.vehicle_id,
     url: row.url,

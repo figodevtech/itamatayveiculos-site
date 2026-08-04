@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next';
 import { UserConfigProvider } from "@/contexts/user-config";
 import { Toaster } from "@/components/ui/sonner"
+import { MotionProvider } from "@/components/motion/motion-provider";
 import { getAppSettings } from "@/services/settings";
 import './globals.css'
 
@@ -46,7 +47,12 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${_inter.variable} ${_spaceGrotesk.variable} font-sans antialiased`}>
-        <UserConfigProvider settings={settings}>{children}</UserConfigProvider>
+        <noscript>
+          <style>{`[data-motion-reveal], [style*="opacity: 0"], [style*="opacity:0"] { opacity: 1 !important; transform: none !important; }`}</style>
+        </noscript>
+        <UserConfigProvider settings={settings}>
+          <MotionProvider>{children}</MotionProvider>
+        </UserConfigProvider>
         <Toaster />
         <Analytics />
       </body>

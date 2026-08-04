@@ -12,6 +12,7 @@ import { ServicesShowcase } from "@/components/home/services-showcase"
 import { BodyTypeSection } from "@/components/home/body-type-section"
 import { getBanners } from "@/services/banners";
 import { getAppSettings } from "@/services/settings";
+import { Reveal } from "@/components/motion/reveal";
 
 export default async function HomePage() {
   const [banners, settings] = await Promise.all([
@@ -30,7 +31,7 @@ export default async function HomePage() {
         />
 
         {/* Mobile Shorts Banner */}
-        <div className="md:hidden px-4 mt-4">
+        <Reveal className="mt-4 px-4 md:hidden" variant="scale">
           <Link href="/shorts" className="block w-full appearance-none outline-none">
             <div
               className="group relative flex items-center justify-between overflow-hidden rounded-2xl p-4 shadow-lg shadow-red-500/30 active:scale-95 transition-all duration-300"
@@ -49,12 +50,12 @@ export default async function HomePage() {
                 </div>
               </div>
 
-              <div className="relative z-10 bg-yellow-500 rounded-full px-2.5 py-1 backdrop-blur-md shadow-sm border animate-pulse border-red-400">
+              <div className="relative z-10 rounded-full border border-red-400 bg-yellow-500 px-2.5 py-1 shadow-sm backdrop-blur-md">
                 <span className="text-white text-[10px] font-bold uppercase tracking-widest drop-shadow-sm">Novo</span>
               </div>
             </div>
           </Link>
-        </div>
+        </Reveal>
 
         <HeroSearch />
         <div className="mt-6">

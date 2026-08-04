@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { User, Heart } from "lucide-react";
+import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { MobileMenu } from "./header/mobile-menu";
@@ -11,19 +12,41 @@ import { cn } from "@/lib/utils";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const isScrolledRef = useRef(false);
 
   useEffect(() => {
+    let frameId: number | null = null;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (frameId !== null) return;
+
+      frameId = window.requestAnimationFrame(() => {
+        const nextIsScrolled = window.scrollY > 20;
+        if (nextIsScrolled !== isScrolledRef.current) {
+          isScrolledRef.current = nextIsScrolled;
+          setIsScrolled(nextIsScrolled);
+        }
+        frameId = null;
+      });
     };
+
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+    };
   }, []);
 
   return (
-    <header
+    <motion.header
+      data-motion-reveal=""
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.35 }}
       className={cn(
-        "sticky top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter,box-shadow] duration-300 ease-in-out will-change-[background-color,backdrop-filter,box-shadow]",
+        "sticky top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter,box-shadow] duration-300 ease-in-out",
         isScrolled
           ? "bg-white/40 backdrop-blur-sm border-b border-white/10 shadow-lg"
           : "bg-white shadow-md",
@@ -110,6 +133,6 @@ export function Header() {
           </Button>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

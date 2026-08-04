@@ -123,4 +123,33 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  :where(a, button, [role="button"]):focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-slot="button"]:not(:disabled) {
+    transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+  }
+
+  [data-slot="button"]:not(:disabled):hover {
+    transform: translateY(-1px);
+  }
+}
+
+[data-slot="button"]:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

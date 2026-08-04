@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import * as motion from "motion/react-client";
 import {
   BadgeCheck,
   Camera,
@@ -16,6 +17,8 @@ import {
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
+import { ResponsiveReveal, Reveal } from "@/components/motion/reveal";
+import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 export const metadata: Metadata = {
   title: "Garantia | Itamatay Veículos",
@@ -74,7 +77,7 @@ export default function WarrantyPage() {
       <main className="flex-1 bg-background">
         <section className="overflow-hidden bg-primary text-primary-foreground">
           <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-12 lg:grid-cols-[0.85fr_1.15fr] lg:px-6 lg:py-20">
-            <div className="max-w-xl">
+            <Reveal className="max-w-xl">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-white/10">
                 <ShieldCheck className="h-6 w-6" />
               </div>
@@ -88,8 +91,9 @@ export default function WarrantyPage() {
                 Informação clara e uma equipe pronta para orientar você sempre
                 que surgir uma dúvida sobre o seu veículo.
               </p>
-            </div>
+            </Reveal>
 
+            <ResponsiveReveal desktopDirection="right">
             <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white/10 shadow-2xl shadow-black/20">
               <Image
                 src="/images/showcase/garantia.webp"
@@ -100,11 +104,12 @@ export default function WarrantyPage() {
                 className="object-cover object-[70%_center]"
               />
             </div>
+            </ResponsiveReveal>
           </div>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-14 lg:px-6 lg:py-20">
-          <div className="mx-auto max-w-3xl text-center">
+          <Reveal className="mx-auto max-w-3xl text-center">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
               Entenda sua cobertura
             </p>
@@ -116,15 +121,24 @@ export default function WarrantyPage() {
               sempre os documentos entregues na compra e confirme as informações
               com nossa equipe.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="mt-10 grid gap-5 lg:grid-cols-3">
+          <motion.div
+            data-motion-reveal=""
+            className="mt-10 grid gap-5 lg:grid-cols-3"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             {warrantyHighlights.map((item) => {
               const Icon = item.icon;
 
               return (
-                <article
+                <motion.article
                   key={item.title}
+                  variants={fadeUp}
+                  whileHover={{ y: -3 }}
                   className="rounded-3xl border border-border bg-card p-7 shadow-sm"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -136,15 +150,15 @@ export default function WarrantyPage() {
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                     {item.description}
                   </p>
-                </article>
+                </motion.article>
               );
             })}
-          </div>
+          </motion.div>
         </section>
 
         <section className="border-y border-border bg-secondary/60">
           <div className="mx-auto max-w-7xl px-4 py-14 lg:px-6 lg:py-20">
-            <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <Reveal className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
                   Antes de solicitar atendimento
@@ -179,12 +193,12 @@ export default function WarrantyPage() {
                   );
                 })}
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-14 lg:px-6 lg:py-20">
-          <div className="mb-9 max-w-2xl">
+          <Reveal className="mb-9 max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
               Fale com nossa equipe
             </p>
@@ -195,10 +209,17 @@ export default function WarrantyPage() {
               Escolha o assunto para iniciar o atendimento com a mensagem já
               preenchida no WhatsApp.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid gap-5 lg:grid-cols-2">
-            <article className="relative overflow-hidden rounded-3xl bg-primary p-7 text-primary-foreground sm:p-9">
+          <motion.div
+            data-motion-reveal=""
+            className="grid gap-5 lg:grid-cols-2"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
+            <motion.article variants={fadeUp} className="relative overflow-hidden rounded-3xl bg-primary p-7 text-primary-foreground sm:p-9">
               <div
                 aria-hidden="true"
                 className="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-white/10"
@@ -227,9 +248,9 @@ export default function WarrantyPage() {
                   </Link>
                 </Button>
               </div>
-            </article>
+            </motion.article>
 
-            <article className="relative overflow-hidden rounded-3xl border border-border bg-card p-7 sm:p-9">
+            <motion.article variants={fadeUp} className="relative overflow-hidden rounded-3xl border border-border bg-card p-7 sm:p-9">
               <div
                 aria-hidden="true"
                 className="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-primary/5"
@@ -258,16 +279,16 @@ export default function WarrantyPage() {
                   </Link>
                 </Button>
               </div>
-            </article>
-          </div>
+            </motion.article>
+          </motion.div>
 
-          <div className="mt-6 flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/5 p-5 text-sm text-foreground">
+          <Reveal className="mt-6 flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/5 p-5 text-sm text-foreground">
             <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
             <p>
               Atendimento para garantia e manutenção pelo número
               <strong> (83) 99978-7149</strong>.
             </p>
-          </div>
+          </Reveal>
         </section>
       </main>
       <Footer />

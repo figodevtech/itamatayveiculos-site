@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Car, Wrench, ShieldCheck, MapPin, GaugeCircle } from "lucide-react";
+import { Car, Wrench, MapPin, GaugeCircle } from "lucide-react";
 import type { VehicleReelItem } from "./reel-menu-item";
 import Link from "next/link";
 import { Separator } from "../ui/separator";

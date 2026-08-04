@@ -1,10 +1,12 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import * as motion from "motion/react-client";
 import { Button } from "@/components/ui/button";
 import { VehicleCard } from "@/components/vehicle-card";
 import { getFeaturedVehicles } from "@/lib/vehicles";
 import { getAppSettings } from "@/services/settings";
+import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 export async function FeaturedVehicles() {
   const [vehicles, settings] = await Promise.all([
@@ -16,15 +18,22 @@ export async function FeaturedVehicles() {
   } as CSSProperties;
 
   return (
-    <section className="bg-secondary/50 py-12 lg:py-16">
+    <motion.section
+      data-motion-reveal=""
+      className="bg-secondary/50 py-12 lg:py-16"
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewportOnce}
+    >
       <div className="mx-auto max-w-7xl px-4 lg:px-6">
-        <div className="mb-8 flex items-end justify-between">
+        <motion.div variants={fadeUp} className="mb-8 flex items-end justify-between">
           <div>
             <h2 className="font-mono text-2xl font-bold text-foreground">
               Veículos em Destaque
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Veiculos selecionados com os melhores precos
+              Veículos selecionados com os melhores preços
             </p>
           </div>
           <Button
@@ -33,34 +42,34 @@ export async function FeaturedVehicles() {
             style={primaryColorStyle}
             asChild
           >
-            <Link href="/veiculos">
+            <Link href="/veiculos" className="group/link">
               Ver todos
-              <ArrowRight className="ml-1 h-4 w-4" />
+              <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
             </Link>
           </Button>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <motion.div variants={staggerContainer} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {vehicles.map((vehicle, index) => (
-            <VehicleCard
-              key={vehicle.id}
-              vehicle={vehicle}
-              priority={index < 2}
-              primaryColor={settings?.primary_color}
-            />
+            <motion.div key={vehicle.id} variants={fadeUp} className="h-full">
+              <VehicleCard
+                vehicle={vehicle}
+                priority={index < 2}
+                primaryColor={settings?.primary_color}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        <div className="mt-6 flex justify-center md:hidden">
+        <motion.div variants={fadeUp} className="mt-6 flex justify-center md:hidden">
           <Button variant="outline" asChild>
-            <Link href="/veiculos">
-              Ver todos os veiculos
-              <ArrowRight className="ml-1 h-4 w-4" />
+            <Link href="/veiculos" className="group/link">
+              Ver todos os veículos
+              <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
             </Link>
           </Button>
-        </div>
-
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }

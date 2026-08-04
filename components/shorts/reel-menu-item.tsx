@@ -5,14 +5,13 @@ import {
   Heart,
   Share2,
   Info,
-  Bookmark,
   Play,
   Pause,
   Volume2,
   VolumeX,
-  MessageCircle,
   Loader2,
 } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -35,12 +34,10 @@ interface ReelMenuItemProps {
   isMuted: boolean;
   modalOpen: boolean;
   onLike: (id: string) => void;
-  onSave: (id: string) => void;
   onShare: (id: string) => void;
   onOpenDetails: () => void;
   onToggleMute: () => void;
   isLiked: boolean;
-  isSaved: boolean;
 }
 
 export function ReelMenuItem({
@@ -50,13 +47,12 @@ export function ReelMenuItem({
   isMuted,
   modalOpen,
   onLike,
-  onSave,
   onShare,
   onOpenDetails,
   onToggleMute,
   isLiked,
-  isSaved,
 }: ReelMenuItemProps) {
+  const shouldReduceMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBuffering, setIsBuffering] = useState(false);
@@ -67,6 +63,12 @@ export function ReelMenuItem({
   const playIconTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const shouldPlay = isActive && !modalOpen;
+
+  useEffect(() => {
+    return () => {
+      if (playIconTimeoutRef.current) clearTimeout(playIconTimeoutRef.current);
+    };
+  }, []);
 
   // Handle play/pause based on active state and modal
   useEffect(() => {
@@ -112,7 +114,7 @@ export function ReelMenuItem({
     } else {
       video.pause();
     }
-  }, [shouldPlay]);
+  }, [isMuted, shouldPlay]);
 
   // Update muted state
   useEffect(() => {
@@ -222,13 +224,6 @@ export function ReelMenuItem({
     lastTapRef.current = now;
   }, [isPlaying, item.id, onLike]);
 
-  const formatNumber = (num: number) => {
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1) + "k";
-    }
-    return num.toString();
-  };
-
   const formatPrice = (price: number) => {
     return price.toLocaleString("pt-BR", {
       style: "currency",
@@ -267,41 +262,58 @@ export function ReelMenuItem({
         onContextMenu={(e) => e.preventDefault()}
         onClick={handleTap}
         aria-label={`Vídeo do veículo ${vehicleName}`}
-        // @ts-ignore - webkit-playsinline is a specific attribute for iOS
         webkit-playsinline="true"
       />
 
       {/* Buffering Indicator */}
-      {isBuffering && isActive && (
-        <div className="absolute inset-0 flex items-center justify-center z-20">
-          <Loader2 className="w-12 h-12 text-white animate-spin" />
-        </div>
-      )}
+      <AnimatePresence>
+        {isBuffering && isActive && (
+          <motion.div
+            className="absolute inset-0 z-20 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <Loader2 className="h-12 w-12 animate-spin text-white" />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Play/Pause Icon Feedback */}
-      {showPlayIcon && (
-        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-          <div className="bg-black/40 rounded-full p-4 animate-in fade-in zoom-in duration-200">
+      <AnimatePresence>
+        {showPlayIcon && (
+        <motion.div
+          className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
+          initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+        >
+          <div className="rounded-full bg-black/40 p-4">
             {isPlaying ? (
               <Pause className="w-12 h-12 text-white" />
             ) : (
               <Play className="w-12 h-12 text-white" />
             )}
           </div>
-        </div>
-      )}
+        </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Double Tap Like Animation */}
-      {showLikeAnimation && (
-        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-          <Heart
-            className="w-24 h-24 text-red-500 fill-red-500 animate-in zoom-in duration-300"
-            style={{
-              animation: "likeAnimation 0.8s ease-out forwards",
-            }}
-          />
-        </div>
-      )}
+      <AnimatePresence>
+        {showLikeAnimation && (
+          <motion.div
+            className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
+            initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.88 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+          >
+            <Heart className="h-24 w-24 fill-red-500 text-red-500" />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
@@ -309,15 +321,18 @@ export function ReelMenuItem({
       {/* Progress Bar */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-white/20 z-30">
         <div
-          className="h-full bg-white transition-all duration-100"
-          style={{ width: `${progress}%` }}
+          className="h-full origin-left bg-white transition-transform duration-100"
+          style={{ transform: `scaleX(${progress / 100})` }}
         />
       </div>
 
       {/* Mute Toggle */}
-      <button
+      <motion.button
+        type="button"
         onClick={onToggleMute}
         className="absolute top-[calc(1rem+env(safe-area-inset-top))] right-4 z-30 bg-black/40 backdrop-blur-sm rounded-full p-2 text-white hover:bg-black/60 transition-colors"
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.96 }}
         aria-label={isMuted ? "Ativar som" : "Desativar som"}
       >
         {isMuted ? (
@@ -325,13 +340,21 @@ export function ReelMenuItem({
         ) : (
           <Volume2 className="w-5 h-5" />
         )}
-      </button>
+      </motion.button>
 
       {/* Right Action Buttons */}
-      <div className="absolute right-4 bottom-[calc(8rem+env(safe-area-inset-bottom))] flex flex-col items-center gap-5 z-20">
-        <button
+      <motion.div
+        className="absolute right-4 bottom-[calc(8rem+env(safe-area-inset-bottom))] flex flex-col items-center gap-5 z-20"
+        initial={false}
+        animate={{ opacity: isActive ? 1 : 0, y: isActive || shouldReduceMotion ? 0 : 8 }}
+        transition={{ duration: 0.22 }}
+      >
+        <motion.button
+          type="button"
           onClick={() => onLike(item.id)}
           className="flex flex-col items-center gap-1 text-white"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.96 }}
           aria-label={`Curtir ${vehicleName}`}
         >
           <div
@@ -349,11 +372,14 @@ export function ReelMenuItem({
           {/* <span className="text-xs font-medium">
             {formatNumber(item.likes + (isLiked ? 1 : 0))}
           </span> */}
-        </button>
+        </motion.button>
 
-        <button
+        <motion.button
+          type="button"
           onClick={() => onShare(item.id)}
           className="flex flex-col items-center gap-1 text-white"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.96 }}
           aria-label={`Compartilhar ${vehicleName}`}
         >
           <div className="bg-white/10 backdrop-blur-sm rounded-full p-3 hover:bg-white/20 transition-colors">
@@ -362,18 +388,21 @@ export function ReelMenuItem({
           {/* <span className="text-xs font-medium">
             {formatNumber(item.shares)}
           </span> */}
-        </button>
+        </motion.button>
 
-        <button
+        <motion.button
+          type="button"
           onClick={onOpenDetails}
           className="flex flex-col items-center gap-1 text-white"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.96 }}
           aria-label={`Ver detalhes de ${vehicleName}`}
         >
           <div className="bg-white/10 backdrop-blur-sm rounded-full p-3 hover:bg-white/20 transition-colors">
             <Info className="w-7 h-7" />
           </div>
           <span className="text-xs font-medium">Info</span>
-        </button>
+        </motion.button>
 
         {/* <button
           onClick={() => onSave(item.id)}
@@ -399,10 +428,15 @@ export function ReelMenuItem({
             {formatNumber(item.saves + (isSaved ? 1 : 0))}
           </span>
         </button> */}
-      </div>
+      </motion.div>
 
       {/* Bottom Info Overlay */}
-      <div className="absolute bottom-0 left-0 right-20 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] z-20">
+      <motion.div
+        className="absolute bottom-0 left-0 right-20 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] z-20"
+        initial={false}
+        animate={{ opacity: isActive ? 1 : 0, y: isActive || shouldReduceMotion ? 0 : 8 }}
+        transition={{ duration: 0.22 }}
+      >
         <div className="flex flex-wrap gap-2 mb-2">
           <Badge variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-0 text-xs">
             {item.vehicle.year}
@@ -446,34 +480,7 @@ export function ReelMenuItem({
             </Link>
           </Button>
         </div>
-      </div>
-
-      {/* CSS for like animation */}
-      <style jsx>{`
-        @keyframes likeAnimation {
-          0% {
-            transform: scale(0);
-            opacity: 0;
-          }
-          15% {
-            transform: scale(1.2);
-            opacity: 1;
-          }
-          30% {
-            transform: scale(0.95);
-          }
-          45% {
-            transform: scale(1.05);
-          }
-          60% {
-            transform: scale(1);
-          }
-          100% {
-            transform: scale(1);
-            opacity: 0;
-          }
-        }
-      `}</style>
+      </motion.div>
     </div>
   );
 }

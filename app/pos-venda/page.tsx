@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import * as motion from "motion/react-client";
 import {
   CarFront,
   CheckCircle2,
@@ -15,6 +16,8 @@ import {
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
+import { ResponsiveReveal, Reveal } from "@/components/motion/reveal";
+import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 export const metadata: Metadata = {
   title: "Pós-venda | Itamatay Veículos",
@@ -71,7 +74,7 @@ export default function AfterSalesPage() {
       <main className="flex-1 bg-background">
         <section className="overflow-hidden border-b border-border bg-card">
           <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-12 lg:grid-cols-[0.9fr_1.1fr] lg:px-6 lg:py-20">
-            <div className="max-w-xl">
+            <Reveal className="max-w-xl">
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
                 Cuidado que continua
               </p>
@@ -90,8 +93,9 @@ export default function AfterSalesPage() {
                 <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />
                 <span>Atendimento próximo, claro e focado no que você precisa.</span>
               </div>
-            </div>
+            </Reveal>
 
+            <ResponsiveReveal desktopDirection="right">
             <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-primary/10 shadow-xl shadow-primary/10">
               <Image
                 src="/images/showcase/pos-vendas.webp"
@@ -102,11 +106,12 @@ export default function AfterSalesPage() {
                 className="object-cover object-[72%_center]"
               />
             </div>
+            </ResponsiveReveal>
           </div>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-14 lg:px-6 lg:py-20">
-          <div className="max-w-2xl">
+          <Reveal className="max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
               Suporte completo
             </p>
@@ -117,15 +122,24 @@ export default function AfterSalesPage() {
               Uma estrutura de atendimento pensada para oferecer orientação e
               confiança também depois que você sai de carro novo.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <motion.div
+            data-motion-reveal=""
+            className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             {services.map((service) => {
               const Icon = service.icon;
 
               return (
-                <article
+                <motion.article
                   key={service.title}
+                  variants={fadeUp}
+                  whileHover={{ y: -3 }}
                   className="rounded-2xl border border-border bg-card p-6 shadow-sm"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -137,14 +151,14 @@ export default function AfterSalesPage() {
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {service.description}
                   </p>
-                </article>
+                </motion.article>
               );
             })}
-          </div>
+          </motion.div>
         </section>
 
         <section className="border-y border-border bg-secondary/60">
-          <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:px-6 lg:py-20">
+          <Reveal className="mx-auto grid max-w-7xl gap-10 px-4 py-14 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:px-6 lg:py-20">
             <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 lg:h-28 lg:w-28">
               <ClipboardCheck className="h-9 w-9 lg:h-12 lg:w-12" />
             </div>
@@ -161,11 +175,11 @@ export default function AfterSalesPage() {
                 necessidade, nossa equipe está pronta para orientar você.
               </p>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-14 lg:px-6 lg:py-20">
-          <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-9 text-primary-foreground shadow-xl shadow-primary/15 sm:px-10 lg:px-12">
+          <Reveal variant="scale" className="relative overflow-hidden rounded-3xl bg-primary px-6 py-9 text-primary-foreground shadow-xl shadow-primary/15 sm:px-10 lg:px-12">
             <div
               aria-hidden="true"
               className="absolute -right-16 -top-24 h-64 w-64 rounded-full bg-white/10"
@@ -208,7 +222,7 @@ export default function AfterSalesPage() {
                 </Link>
               </Button>
             </div>
-          </div>
+          </Reveal>
         </section>
       </main>
       <Footer />

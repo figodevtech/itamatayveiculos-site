@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import * as motion from "motion/react-client";
 import {
   ChevronRight,
   Heart,
@@ -29,6 +30,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AIDescriptionBox } from "@/components/vehicles/ai-description";
 import { getAppSettings } from "@/services/settings";
+import { Reveal } from "@/components/motion/reveal";
+import { fadeIn, fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 export const revalidate = 0;
 
@@ -158,7 +161,13 @@ export default async function VehicleDetailPage({
       <main className="flex-1 bg-background">
         {/* Breadcrumbs */}
         <div className="mx-auto max-w-7xl px-4 py-4 lg:px-6">
-          <nav className="flex items-center gap-1 text-xs text-muted-foreground">
+          <motion.nav
+            data-motion-reveal=""
+            className="flex items-center gap-1 text-xs text-muted-foreground"
+            variants={fadeIn}
+            initial="hidden"
+            animate="visible"
+          >
             <Link href="/" className="hover:text-foreground">
               Início
             </Link>
@@ -175,14 +184,20 @@ export default async function VehicleDetailPage({
             </Link>
             <ChevronRight className="h-3 w-3" />
             <span className="text-foreground">{vehicle.model}</span>
-          </nav>
+          </motion.nav>
         </div>
 
         <div className="mx-auto max-w-7xl px-4 pb-12 lg:px-6">
           {/* Title area */}
-          <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div>
-              <div className="mb-2 flex items-center gap-2">
+          <motion.div
+            data-motion-reveal=""
+            className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div data-motion-reveal="" variants={staggerContainer}>
+              <motion.div data-motion-reveal="" variants={fadeIn} className="mb-2 flex items-center gap-2">
                 <Badge
                   variant="secondary"
                   className="bg-primary/10 text-primary"
@@ -198,14 +213,14 @@ export default async function VehicleDetailPage({
                     Novo
                   </Badge>
                 )}
-              </div>
-              <h1 className="font-mono text-2xl font-bold text-foreground md:text-3xl">
+              </motion.div>
+              <motion.h1 data-motion-reveal="" variants={fadeUp} className="font-mono text-2xl font-bold text-foreground md:text-3xl">
                 {vehicle.brand} {vehicle.model}
-              </h1>
-              <p className="mt-1 text-base text-muted-foreground">
+              </motion.h1>
+              <motion.p data-motion-reveal="" variants={fadeUp} className="mt-1 text-base text-muted-foreground">
                 {vehicle.version}
-              </p>
-              <div className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
+              </motion.p>
+              <motion.div data-motion-reveal="" variants={fadeUp} className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
                 <span>
                   {vehicle.year}/{vehicle.yearModel}
                 </span>
@@ -216,21 +231,21 @@ export default async function VehicleDetailPage({
                   <MapPin className="h-3.5 w-3.5 shrink-0" /> {vehicle.city} -{" "}
                   {vehicle.state}
                 </span>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            <div className="flex items-center gap-2 w-full md:w-auto">
-              <Button variant="outline" size="icon">
+            <motion.div variants={fadeUp} className="flex w-full items-center gap-2 md:w-auto">
+              <Button variant="outline" size="icon" aria-label="Favoritar veículo">
                 <Heart className="h-4 w-4" />
                 <span className="sr-only">Favoritar</span>
               </Button>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" aria-label="Compartilhar veículo">
                 <Share2 className="h-4 w-4" />
                 <span className="sr-only">Compartilhar</span>
               </Button>
 
               {shortVideo && (
-                <div className="ml-auto animate-in fade-in zoom-in-95">
+                <motion.div variants={fadeIn} className="ml-auto">
                   <Link
                     href={`/shorts?v=${shortVideo.id}`}
                     className="block outline-none appearance-none"
@@ -247,22 +262,24 @@ export default async function VehicleDetailPage({
                       <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] xl:group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out" />
                     </Button>
                   </Link>
-                </div>
+                </motion.div>
               )}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Main content */}
           <div className="flex flex-col gap-6 lg:flex-row">
             <div className="flex-1">
-              <VehicleGallery
-                images={vehicle.images.map((img) => img.image_url)}
-                alt={`${vehicle.brand} ${vehicle.model}`}
-              />
+              <Reveal variant="scale">
+                <VehicleGallery
+                  images={vehicle.images.map((img) => img.image_url)}
+                  alt={`${vehicle.brand} ${vehicle.model}`}
+                />
+              </Reveal>
 
               <div className="mt-6 flex flex-col gap-6">
                 {/* Price mobile */}
-                <div className="flex flex-col gap-4 lg:hidden">
+                <Reveal className="flex flex-col gap-4 lg:hidden">
                   <Card className="border-border bg-card">
                     <CardContent className="p-5">
                       <p className="font-mono text-3xl font-bold text-accent">
@@ -372,11 +389,12 @@ export default async function VehicleDetailPage({
                       </div>
                     </CardContent>
                   </Card>
-                </div>
+                </Reveal>
 
                 <VehicleSpecs vehicle={vehicle} />
 
                 {/* Description */}
+                <Reveal>
                 <Card className="border-border bg-card">
                   <CardContent className="p-5">
                     <h3 className="mb-3 font-mono text-lg font-bold text-card-foreground">
@@ -387,29 +405,41 @@ export default async function VehicleDetailPage({
                     </p>
                   </CardContent>
                 </Card>
+                </Reveal>
                 {vehicle.enableAiDescription && (
-                  <AIDescriptionBox text={vehicle.aiDescription || undefined} />
+                  <Reveal>
+                    <AIDescriptionBox text={vehicle.aiDescription || undefined} />
+                  </Reveal>
                 )}
 
                 {/* Features */}
+                <Reveal>
                 <Card className="border-border bg-card">
                   <CardContent className="p-5">
                     <h3 className="mb-4 font-mono text-lg font-bold text-card-foreground">
                       Itens do veículo
                     </h3>
-                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    <motion.div
+                      className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+                      variants={staggerContainer}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={viewportOnce}
+                    >
                       {vehicle.features.map((feature) => (
-                        <div
+                        <motion.div
                           key={feature}
+                          variants={fadeUp}
                           className="flex items-center gap-2 text-sm text-muted-foreground"
                         >
                           <Check className="h-4 w-4 shrink-0 text-primary" />
                           <span>{feature}</span>
-                        </div>
+                        </motion.div>
                       ))}
-                    </div>
+                    </motion.div>
                   </CardContent>
                 </Card>
+                </Reveal>
               </div>
             </div>
 
@@ -423,20 +453,28 @@ export default async function VehicleDetailPage({
 
           {/* Related vehicles */}
           {relatedVehicles.length > 0 && (
-            <section className="mt-12">
-              <h2 className="mb-6 font-mono text-xl font-bold text-foreground">
+            <motion.section
+              data-motion-reveal=""
+              className="mt-12"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+            >
+              <motion.h2 variants={fadeUp} className="mb-6 font-mono text-xl font-bold text-foreground">
                 Veículos similares
-              </h2>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              </motion.h2>
+              <motion.div variants={staggerContainer} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {relatedVehicles.map((v) => (
-                  <VehicleCard
-                    key={v.id}
-                    vehicle={v}
-                    primaryColor={settings?.primary_color}
-                  />
+                  <motion.div key={v.id} variants={fadeUp} className="h-full">
+                    <VehicleCard
+                      vehicle={v}
+                      primaryColor={settings?.primary_color}
+                    />
+                  </motion.div>
                 ))}
-              </div>
-            </section>
+              </motion.div>
+            </motion.section>
           )}
         </div>
       </main>

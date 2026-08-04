@@ -92,7 +92,7 @@ export function FilterSidebar({
         <div className="flex items-center gap-2">
           <button
             onClick={onClearFilters}
-            className="text-xs font-medium text-accent hover:underline"
+            className="text-xs font-medium text-accent transition-transform hover:underline active:scale-95"
           >
             Limpar filtros
           </button>
