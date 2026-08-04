@@ -6,7 +6,14 @@ import { Button } from "@/components/ui/button";
 import { VehicleCard } from "@/components/vehicle-card";
 import { getFeaturedVehicles } from "@/lib/vehicles";
 import { getAppSettings } from "@/services/settings";
-import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
+import { fadeUp, staggerContainer } from "@/lib/motion";
+
+const featuredViewport = {
+  once: true,
+  // On mobile this section becomes a tall single-column list. Triggering on
+  // any intersection prevents the cards from remaining hidden while scrolling.
+  amount: "some",
+} as const;
 
 export async function FeaturedVehicles() {
   const [vehicles, settings] = await Promise.all([
@@ -24,7 +31,7 @@ export async function FeaturedVehicles() {
       variants={staggerContainer}
       initial="hidden"
       whileInView="visible"
-      viewport={viewportOnce}
+      viewport={featuredViewport}
     >
       <div className="mx-auto max-w-7xl px-4 lg:px-6">
         <motion.div variants={fadeUp} className="mb-8 flex items-end justify-between">
