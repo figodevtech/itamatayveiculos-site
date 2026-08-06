@@ -7,7 +7,7 @@ import { getRepasseVehicles } from "@/lib/vehicles"
 export const revalidate = 0;
 
 export const metadata = {
-  title: "Repasses | Itamatay Veículos",
+  title: "Repasses | Itamatay Veículos®",
   description: "Confira os veículos em repasse disponíveis.",
 }
 

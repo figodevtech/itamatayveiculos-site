@@ -21,7 +21,7 @@ import { ResponsiveReveal, Reveal } from "@/components/motion/reveal";
 import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 export const metadata: Metadata = {
-  title: "Garantia | Itamatay Veículos",
+  title: "Garantia | Itamatay Veículos®",
   description:
     "Entenda como funciona a garantia dos veículos elegíveis e fale com a equipe da Itamatay Veículos.",
 };

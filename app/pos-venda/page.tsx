@@ -20,7 +20,7 @@ import { ResponsiveReveal, Reveal } from "@/components/motion/reveal";
 import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 export const metadata: Metadata = {
-  title: "Pós-venda | Itamatay Veículos",
+  title: "Pós-venda | Itamatay Veículos®",
   description:
     "Conheça o suporte pós-venda da Itamatay Veículos e fale com nossa equipe.",
 };

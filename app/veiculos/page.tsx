@@ -7,7 +7,7 @@ import { getVehicles } from "@/lib/vehicles"
 export const revalidate = 0;
 
 export const metadata = {
-  title: "Itamatay Veículos",
+  title: "Veículos | Itamatay Veículos®",
   description:
     "Encontre carros com os melhores preços. Filtre por marca, modelo, ano e muito mais.",
 }

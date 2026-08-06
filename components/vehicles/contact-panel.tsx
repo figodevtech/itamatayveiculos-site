@@ -53,7 +53,7 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
             <div className="mt-4 flex items-center gap-2 rounded-lg bg-secondary p-3">
               <Shield className="h-5 w-5 shrink-0 text-primary" />
               <span className="text-xs text-muted-foreground">
-                Negociação protegida pela Itamatay Veículos. Compre com segurança.
+                Negociação protegida pela Itamatay Veículos®. Compre com segurança.
               </span>
             </div>
           </CardContent>
