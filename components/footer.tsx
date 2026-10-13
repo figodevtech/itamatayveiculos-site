@@ -16,7 +16,7 @@ const footerGroups = [
     title: "Serviços",
     links: [
       { href: "", label: "Financiamento" },
-      { href: "", label: "Seguro auto" },
+      { href: "/seguro", label: "Seguro auto" },
       { href: "", label: "Tabela FIPE" },
       { href: "", label: "Consulta veicular" },
     ],

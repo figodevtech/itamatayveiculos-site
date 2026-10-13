@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -16,7 +15,6 @@ interface ShowcaseCardProps {
   href: string;
   cta: string;
   direction: "left" | "right";
-  featured?: boolean;
 }
 
 export function ServicesShowcase() {
@@ -26,19 +24,37 @@ export function ServicesShowcase() {
       className="overflow-hidden bg-secondary/50 pb-12 lg:pb-16"
     >
       <div className="mx-auto max-w-7xl px-4 lg:px-6">
-        <ShowcaseCard
-          eyebrow="Oportunidades Itamatay"
-          title="Veículos de repasse"
-          description="Confira as opções disponíveis e encontre uma oportunidade para o seu perfil."
-          image="/images/showcase/repasses-itamatay-v3.webp"
-          imageAlt="Veículos disponíveis em uma concessionária"
-          href="/veiculos/repasses"
-          cta="Ver repasses"
-          direction="left"
-          featured
-        />
+        <h2 id="services-showcase-title" className="sr-only">
+          Serviços e Soluções Itamatay
+        </h2>
 
-        <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        {/* Grade 2x2 no desktop e 1 coluna no mobile */}
+        <div className="grid gap-4 lg:grid-cols-2">
+          {/* Card 1: Veículos de repasse */}
+          <ShowcaseCard
+            eyebrow="Oportunidades Itamatay"
+            title="Veículos de repasse"
+            description="Confira as opções disponíveis e encontre uma oportunidade para o seu perfil."
+            image="/images/showcase/repasses-itamatay-v3.webp"
+            imageAlt="Veículos disponíveis em uma concessionária"
+            href="/veiculos/repasses"
+            cta="Ver repasses"
+            direction="left"
+          />
+
+          {/* Card 2: Seguro Auto */}
+          <ShowcaseCard
+            eyebrow="Proteja seu veículo"
+            title="Seguro Auto"
+            description="Mais tranquilidade para você e proteção para o seu veículo. Conheça nossa oferta de seguro automotivo."
+            image="/images/showcase/seguro-itamatay.webp"
+            imageAlt="Veículo protegido com seguro automotivo"
+            href="/seguro"
+            cta="Conhecer o seguro"
+            direction="right"
+          />
+
+          {/* Card 3: Pós-vendas */}
           <ShowcaseCard
             eyebrow="Cuidado contínuo"
             title="Pós-vendas"
@@ -49,6 +65,8 @@ export function ServicesShowcase() {
             cta="Conhecer o pós-venda"
             direction="left"
           />
+
+          {/* Card 4: Garantia */}
           <ShowcaseCard
             eyebrow="Mais tranquilidade"
             title="Garantia"
@@ -74,15 +92,12 @@ function ShowcaseCard({
   href,
   cta,
   direction,
-  featured = false,
 }: ShowcaseCardProps) {
-  const minimumHeight = featured
-    ? "min-h-[360px] sm:min-h-[400px] lg:min-h-[430px]"
-    : "min-h-[360px] sm:min-h-[400px]";
+  const minimumHeight = "min-h-[360px] sm:min-h-[400px]";
 
   return (
     <ResponsiveReveal desktopDirection={direction} className="h-full">
-      <article className={`group relative overflow-hidden rounded-2xl ${minimumHeight}`}>
+      <article className={`group relative h-full overflow-hidden rounded-2xl ${minimumHeight}`}>
         <motion.div
           data-motion-reveal=""
           className="absolute inset-0"
@@ -95,7 +110,7 @@ function ShowcaseCard({
             src={image}
             alt={imageAlt}
             fill
-            sizes={featured ? "(max-width: 1280px) 100vw, 1280px" : "(max-width: 1023px) 100vw, 50vw"}
+            sizes="(max-width: 1023px) 100vw, 50vw"
             className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
           />
         </motion.div>
@@ -103,13 +118,13 @@ function ShowcaseCard({
 
         <Reveal
           delay={0.08}
-          className={`relative flex ${minimumHeight} flex-col items-start justify-center px-6 py-10 text-white sm:px-10 ${featured ? "max-w-2xl lg:px-14" : "max-w-lg"}`}
+          className={`relative flex ${minimumHeight} flex-col items-start justify-center px-6 py-10 text-white sm:px-10 max-w-lg`}
         >
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-white/70">
             {eyebrow}
           </p>
-          <Heading featured={featured}>{title}</Heading>
-          <p className={`mt-3 leading-relaxed text-white/85 ${featured ? "max-w-xl text-base sm:text-lg" : "max-w-sm"}`}>
+          <h3 className="font-mono text-3xl font-bold">{title}</h3>
+          <p className="mt-3 max-w-sm leading-relaxed text-white/85">
             {description}
           </p>
           <Button
@@ -126,16 +141,4 @@ function ShowcaseCard({
       </article>
     </ResponsiveReveal>
   );
-}
-
-function Heading({ featured, children }: { featured: boolean; children: ReactNode }) {
-  if (featured) {
-    return (
-      <h2 id="services-showcase-title" className="font-mono text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-        {children}
-      </h2>
-    );
-  }
-
-  return <h3 className="font-mono text-3xl font-bold">{children}</h3>;
 }
