@@ -128,7 +128,7 @@ export default function InsurancePage() {
               <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white/15 shadow-2xl shadow-black/30">
                 <Image
                   src="/images/showcase/seguro-hero.webp"
-                  alt="Veículo executivo moderno trafegando com segurança ao amanhecer"
+                  alt="Veículo seminovo protegido no pátio da Itamatay Veículos"
                   fill
                   priority
                   sizes="(max-width: 1023px) 100vw, 50vw"
