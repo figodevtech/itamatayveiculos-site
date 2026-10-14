@@ -47,7 +47,7 @@ export function ServicesShowcase() {
             eyebrow="Proteja seu veículo"
             title="Seguro Auto"
             description="Mais tranquilidade para você e proteção para o seu veículo. Conheça nossa oferta de seguro automotivo."
-            image="/images/showcase/seguro-itamatay.webp"
+            image="/images/showcase/seguro-itamatay-v3.webp"
             imageAlt="Veículo protegido com seguro automotivo"
             href="/seguro"
             cta="Conhecer o seguro"
