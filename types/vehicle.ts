@@ -51,3 +51,38 @@ export interface VehicleImage {
 export interface VehicleWithImages extends Vehicle {
   images: VehicleImage[];
 }
+
+/** Only fields needed to display, filter and order inventory cards. */
+export type VehicleCardData = Pick<
+  Vehicle,
+  | "id"
+  | "brand"
+  | "model"
+  | "version"
+  | "year"
+  | "yearModel"
+  | "price"
+  | "mileage"
+  | "fuel"
+  | "bodyType"
+  | "image"
+  | "city"
+  | "state"
+  | "sellerType"
+  | "isNew"
+  | "featured"
+  | "createdAt"
+  | "status"
+>;
+
+export interface HomeVehiclesPage {
+  items: VehicleCardData[];
+  nextCursor: string | null;
+  hasMore: boolean;
+}
+
+export interface VehicleFilterOptions {
+  brands: string[];
+  bodyTypes: string[];
+  fuelTypes: string[];
+}

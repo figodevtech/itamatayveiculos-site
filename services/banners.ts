@@ -1,19 +1,19 @@
-import { createClient } from "@/lib/supabase/server";
-import { Banner } from "@/types/banner";
+import "server-only";
 
-export async function getBanners(): Promise<Banner[]> {
-  const supabase = await createClient();
-  
-  const { data, error } = await supabase
-    .from("banners")
-    .select("*")
-    .eq("active", true)
-    .order("order", { ascending: true });
+import { cache } from "react";
+import { createPublicClient } from "@/lib/supabase/public";
+import { PUBLIC_CACHE_TAGS, readPublicData } from "@/lib/public-cache";
+import type { Banner } from "@/types/banner";
 
-  if (error) {
-    console.error("Error fetching banners:", error);
-    return [];
-  }
+export const getBanners = cache(async (): Promise<Banner[]> => {
+  return readPublicData(["banners"], [PUBLIC_CACHE_TAGS.banners], async () => {
+    const { data, error } = await createPublicClient()
+      .from("banners")
+      .select("id,name,link,order,image_url,active")
+      .eq("active", true)
+      .order("order", { ascending: true });
 
-  return data || [];
-}
+    if (error) throw new Error("Não foi possível carregar os banners.", { cause: error });
+    return data as Banner[];
+  });
+});

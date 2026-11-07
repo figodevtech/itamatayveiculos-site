@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import * as motion from "motion/react-client";
+import { Suspense } from "react";
+import { connection } from "next/server";
 import {
   ChevronRight,
   Heart,
@@ -18,22 +19,16 @@ import { VehicleGallery } from "@/components/vehicles/vehicle-gallery";
 import { VehicleSpecs } from "@/components/vehicles/vehicle-specs";
 import { ContactPanel } from "@/components/vehicles/contact-panel";
 import { VehicleCard } from "@/components/vehicle-card";
-import {
-  getVehicleById,
-  getVehicles,
-  formatPrice,
-  formatMileage,
-} from "@/lib/vehicles";
-import { getShortByVehicleId } from "@/services/shorts";
+import { getVehicleById, getRelatedVehicleCards } from "@/services/vehicles";
+import { formatPrice, formatMileage } from "@/lib/vehicle-format";
+import type { Vehicle } from "@/types/vehicle";
+import { getShortReferenceByVehicleId } from "@/services/shorts";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AIDescriptionBox } from "@/components/vehicles/ai-description";
 import { getAppSettings } from "@/services/settings";
-import { Reveal } from "@/components/motion/reveal";
-import { fadeIn, fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
-export const revalidate = 0;
 
 interface VehicleDetailPageProps {
   params: Promise<{ id: string }>;
@@ -134,6 +129,7 @@ export async function generateMetadata({
 export default async function VehicleDetailPage({
   params,
 }: VehicleDetailPageProps) {
+  await connection();
   const { id } = await params;
   const vehicle = await getVehicleById(id);
 
@@ -141,32 +137,14 @@ export default async function VehicleDetailPage({
     notFound();
   }
 
-  const [shortVideo, allVehicles, settings] = await Promise.all([
-    getShortByVehicleId(id),
-    getVehicles(),
-    getAppSettings(),
-  ]);
-
-  const relatedVehicles = allVehicles
-    .filter(
-      (v) =>
-        v.id !== vehicle.id &&
-        (v.brand === vehicle.brand || v.bodyType === vehicle.bodyType),
-    )
-    .slice(0, 3);
-
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1 bg-background">
         {/* Breadcrumbs */}
         <div className="mx-auto max-w-7xl px-4 py-4 lg:px-6">
-          <motion.nav
-            data-motion-reveal=""
+          <nav
             className="flex items-center gap-1 text-xs text-muted-foreground"
-            variants={fadeIn}
-            initial="hidden"
-            animate="visible"
           >
             <Link href="/" className="hover:text-foreground">
               Início
@@ -184,20 +162,16 @@ export default async function VehicleDetailPage({
             </Link>
             <ChevronRight className="h-3 w-3" />
             <span className="text-foreground">{vehicle.model}</span>
-          </motion.nav>
+          </nav>
         </div>
 
         <div className="mx-auto max-w-7xl px-4 pb-12 lg:px-6">
           {/* Title area */}
-          <motion.div
-            data-motion-reveal=""
+          <div
             className="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between"
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
           >
-            <motion.div data-motion-reveal="" variants={staggerContainer}>
-              <motion.div data-motion-reveal="" variants={fadeIn} className="mb-2 flex items-center gap-2">
+            <div>
+              <div className="mb-2 flex items-center gap-2">
                 <Badge
                   variant="secondary"
                   className="bg-primary/10 text-primary"
@@ -213,14 +187,14 @@ export default async function VehicleDetailPage({
                     Novo
                   </Badge>
                 )}
-              </motion.div>
-              <motion.h1 data-motion-reveal="" variants={fadeUp} className="font-mono text-2xl font-bold text-foreground md:text-3xl">
+              </div>
+              <h1 className="font-mono text-2xl font-bold text-foreground md:text-3xl">
                 {vehicle.brand} {vehicle.model}
-              </motion.h1>
-              <motion.p data-motion-reveal="" variants={fadeUp} className="mt-1 text-base text-muted-foreground">
+              </h1>
+              <p className="mt-1 text-base text-muted-foreground">
                 {vehicle.version}
-              </motion.p>
-              <motion.div data-motion-reveal="" variants={fadeUp} className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
+              </p>
+              <div className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
                 <span>
                   {vehicle.year}/{vehicle.yearModel}
                 </span>
@@ -231,10 +205,10 @@ export default async function VehicleDetailPage({
                   <MapPin className="h-3.5 w-3.5 shrink-0" /> {vehicle.city} -{" "}
                   {vehicle.state}
                 </span>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
 
-            <motion.div variants={fadeUp} className="flex w-full items-center gap-2 md:w-auto">
+            <div className="flex w-full items-center gap-2 md:w-auto">
               <Button variant="outline" size="icon" aria-label="Favoritar veículo">
                 <Heart className="h-4 w-4" />
                 <span className="sr-only">Favoritar</span>
@@ -244,42 +218,23 @@ export default async function VehicleDetailPage({
                 <span className="sr-only">Compartilhar</span>
               </Button>
 
-              {shortVideo && (
-                <motion.div variants={fadeIn} className="ml-auto">
-                  <Link
-                    href={`/shorts?v=${shortVideo.id}`}
-                    className="block outline-none appearance-none"
-                  >
-                    <Button
-                      className="bg-linear-to-r from-rose-500 via-red-500 to-orange-500 hover:shadow-md shadow-red-500/20 text-white font-bold group relative overflow-hidden transition-all transform-gpu active:scale-95 border-0 rounded-xl"
-                      style={{
-                        background:
-                          "linear-gradient(to right, #f43f5e, #ef4444, #f97316)",
-                      }}
-                    >
-                      <Play className="w-4 h-4 mr-2 fill-white group-hover:scale-110 transition-transform" />
-                      <span className="tracking-wide">Assistir Shorts</span>
-                      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] xl:group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out" />
-                    </Button>
-                  </Link>
-                </motion.div>
-              )}
-            </motion.div>
-          </motion.div>
+              <Suspense fallback={<span className="ml-auto h-10 w-40" aria-hidden="true" />}><VehicleShortLink id={id} /></Suspense>
+            </div>
+          </div>
 
           {/* Main content */}
           <div className="flex flex-col gap-6 lg:flex-row">
             <div className="flex-1">
-              <Reveal variant="scale">
+              <div>
                 <VehicleGallery
                   images={vehicle.images.map((img) => img.image_url)}
                   alt={`${vehicle.brand} ${vehicle.model}`}
                 />
-              </Reveal>
+              </div>
 
               <div className="mt-6 flex flex-col gap-6">
                 {/* Price mobile */}
-                <Reveal className="flex flex-col gap-4 lg:hidden">
+                <div className="flex flex-col gap-4 lg:hidden">
                   <Card className="border-border bg-card">
                     <CardContent className="p-5">
                       <p className="font-mono text-3xl font-bold text-accent">
@@ -389,12 +344,12 @@ export default async function VehicleDetailPage({
                       </div>
                     </CardContent>
                   </Card>
-                </Reveal>
+                </div>
 
                 <VehicleSpecs vehicle={vehicle} />
 
                 {/* Description */}
-                <Reveal>
+                <div>
                 <Card className="border-border bg-card">
                   <CardContent className="p-5">
                     <h3 className="mb-3 font-mono text-lg font-bold text-card-foreground">
@@ -405,41 +360,36 @@ export default async function VehicleDetailPage({
                     </p>
                   </CardContent>
                 </Card>
-                </Reveal>
+                </div>
                 {vehicle.enableAiDescription && (
-                  <Reveal>
+                  <div>
                     <AIDescriptionBox text={vehicle.aiDescription || undefined} />
-                  </Reveal>
+                  </div>
                 )}
 
                 {/* Features */}
-                <Reveal>
+                <div>
                 <Card className="border-border bg-card">
                   <CardContent className="p-5">
                     <h3 className="mb-4 font-mono text-lg font-bold text-card-foreground">
                       Itens do veículo
                     </h3>
-                    <motion.div
+                    <div
                       className="grid grid-cols-1 gap-2 sm:grid-cols-2"
-                      variants={staggerContainer}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={viewportOnce}
                     >
                       {vehicle.features.map((feature) => (
-                        <motion.div
+                        <div
                           key={feature}
-                          variants={fadeUp}
                           className="flex items-center gap-2 text-sm text-muted-foreground"
                         >
                           <Check className="h-4 w-4 shrink-0 text-primary" />
                           <span>{feature}</span>
-                        </motion.div>
+                        </div>
                       ))}
-                    </motion.div>
+                    </div>
                   </CardContent>
                 </Card>
-                </Reveal>
+                </div>
               </div>
             </div>
 
@@ -452,33 +402,48 @@ export default async function VehicleDetailPage({
           </div>
 
           {/* Related vehicles */}
-          {relatedVehicles.length > 0 && (
-            <motion.section
-              data-motion-reveal=""
-              className="mt-12"
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportOnce}
-            >
-              <motion.h2 variants={fadeUp} className="mb-6 font-mono text-xl font-bold text-foreground">
-                Veículos similares
-              </motion.h2>
-              <motion.div variants={staggerContainer} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {relatedVehicles.map((v) => (
-                  <motion.div key={v.id} variants={fadeUp} className="h-full">
-                    <VehicleCard
-                      vehicle={v}
-                      primaryColor={settings?.primary_color}
-                    />
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.section>
-          )}
+          <Suspense fallback={<RelatedVehiclesSkeleton />}><RelatedVehicles vehicle={vehicle} /></Suspense>
         </div>
       </main>
       <Footer />
     </div>
   );
+}
+
+
+async function VehicleShortLink({ id }: { id: string }) {
+    const short = await getShortReferenceByVehicleId(id).catch(error => {
+      console.error("Optional vehicle short unavailable", error);
+      return null;
+    });
+    if (!short) return null;
+    return (
+      <Button asChild className="ml-auto rounded-xl bg-linear-to-r from-rose-500 via-red-500 to-orange-500 text-white">
+        <Link href={`/shorts?v=${short.id}`}><Play className="mr-2 h-4 w-4 fill-white" />Assistir Shorts</Link>
+      </Button>
+    );
+}
+
+async function RelatedVehicles({ vehicle }: { vehicle: Pick<Vehicle, "id" | "brand" | "bodyType"> }) {
+    const result = await Promise.all([getRelatedVehicleCards(vehicle), getAppSettings()]).catch(error => {
+      console.error("Optional related vehicles unavailable", error);
+      return null;
+    });
+    if (!result) return <p className="mt-12 text-sm text-muted-foreground">Os veículos similares estão temporariamente indisponíveis.</p>;
+    const [vehicles, settings] = result;
+    if (!vehicles.length) return null;
+    return (
+      <section className="mt-12" aria-label="Veículos similares">
+        <h2 className="mb-6 font-mono text-xl font-bold text-foreground">Veículos similares</h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {vehicles.map(item => <VehicleCard key={item.id} vehicle={item} primaryColor={settings?.primary_color} imageSizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) 50vw, 400px" />)}
+        </div>
+      </section>
+    );
+}
+
+function RelatedVehiclesSkeleton() {
+  return <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label="Carregando veículos similares">
+    {[0, 1, 2].map(index => <div key={index} className="h-80 rounded-xl bg-muted motion-safe:animate-pulse" />)}
+  </div>;
 }

@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { ReelMenuItem, type VehicleReelItem } from "@/components/shorts/reel-menu-item";
 import { DetailsSheet } from "@/components/shorts/details-sheet";
-import { ShortVideo } from "@/services/shorts";
+import type { ShortVideo } from "@/services/shorts";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";

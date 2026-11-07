@@ -4,19 +4,22 @@ import { Calendar, Fuel, Gauge, MapPin, Star } from "lucide-react";
 import * as motion from "motion/react-client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { Vehicle } from "@/lib/vehicles";
-import { formatMileage, formatPrice } from "@/lib/vehicles";
+import type { VehicleCardData } from "@/types/vehicle";
+import { formatMileage, formatPrice } from "@/lib/vehicle-format";
+import { LinkFeedback } from "@/components/navigation/link-feedback";
 import { fadeIn, premiumEase } from "@/lib/motion";
 
 interface VehicleCardProps {
-  vehicle: Vehicle;
+  vehicle: VehicleCardData;
   priority?: boolean;
   primaryColor?: string;
+  imageSizes?: string;
 }
 
-export function VehicleCard({ vehicle, priority, primaryColor }: VehicleCardProps) {
+export function VehicleCard({ vehicle, priority, primaryColor, imageSizes }: VehicleCardProps) {
   return (
-    <Link href={`/veiculos/${vehicle.id}`} className="block h-full rounded-xl">
+    <Link href={`/veiculos/${vehicle.id}`} className="relative block h-full rounded-xl">
+      <LinkFeedback />
       <motion.article
         whileHover={{ y: -5 }}
         transition={{ duration: 0.2, ease: premiumEase }}
@@ -29,7 +32,7 @@ export function VehicleCard({ vehicle, priority, primaryColor }: VehicleCardProp
               alt={`${vehicle.brand} ${vehicle.model} ${vehicle.version}`}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+              sizes={imageSizes ?? "(max-width: 640px) calc(50vw - 24px), (max-width: 1024px) calc(50vw - 32px), 320px"}
               priority={priority}
             />
             {vehicle.isNew && (

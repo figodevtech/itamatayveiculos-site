@@ -22,11 +22,12 @@ import {
 import { VehicleCard } from "@/components/vehicle-card";
 import { FilterSidebar } from "@/components/vehicles/filter-sidebar";
 import { useUserConfig } from "@/contexts/user-config";
-import type { Vehicle } from "@/lib/vehicles";
+import type { VehicleCardData, VehicleFilterOptions } from "@/types/vehicle";
 import { fadeUp, premiumEase, staggerContainer } from "@/lib/motion";
 
 interface VehicleListContentProps {
-  initialVehicles: Vehicle[];
+  initialVehicles: VehicleCardData[];
+  filterOptions: VehicleFilterOptions;
   basePath?: string;
   title?: string;
 }
@@ -38,6 +39,7 @@ interface ActiveFilter {
 
 export function VehicleListContent({
   initialVehicles,
+  filterOptions,
   basePath = "/veiculos",
   title = "Veículos à venda",
 }: VehicleListContentProps) {
@@ -153,7 +155,7 @@ export function VehicleListContent({
         data-motion-reveal=""
         className="mb-6"
         variants={staggerContainer}
-        initial="hidden"
+        initial={false}
         animate="visible"
       >
         <motion.h1 variants={fadeUp} className="font-mono text-2xl font-bold text-foreground md:text-3xl">
@@ -178,6 +180,7 @@ export function VehicleListContent({
               Refine a lista por marca, carroceria, combustível, preço e ano.
             </DrawerDescription>
             <FilterSidebar
+              filterOptions={filterOptions}
               filters={filters}
               onFilterChange={handleFilterChange}
               onClearFilters={handleClearFilters}
@@ -271,12 +274,13 @@ export function VehicleListContent({
         <motion.aside
           data-motion-reveal=""
           className="hidden w-64 shrink-0 lg:block"
-          initial={{ opacity: 0, x: -12 }}
+          initial={false}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.35, ease: premiumEase }}
         >
           <div className="sticky top-20 rounded-xl border border-border bg-card p-5">
             <FilterSidebar
+              filterOptions={filterOptions}
               filters={filters}
               onFilterChange={handleFilterChange}
               onClearFilters={handleClearFilters}
@@ -291,7 +295,7 @@ export function VehicleListContent({
           transition={{ duration: 0.2 }}
           aria-busy={isPending}
         >
-          <AnimatePresence initial={false} mode="wait">
+          <AnimatePresence initial={false}>
             {initialVehicles.length > 0 ? (
               <motion.div
                 key="vehicle-results"
@@ -303,17 +307,22 @@ export function VehicleListContent({
                 }
               >
                 <AnimatePresence initial={false} mode="popLayout">
-                  {initialVehicles.map((vehicle) => (
+                  {initialVehicles.map((vehicle, index) => (
                     <motion.div
                       key={vehicle.id}
                       layout
-                      initial={{ opacity: 0, y: 12 }}
+                      initial={false}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.98 }}
                       transition={{ duration: 0.25, ease: premiumEase }}
                       className="h-full"
                     >
-                      <VehicleCard vehicle={vehicle} primaryColor={primaryColor} />
+                      <VehicleCard
+                        vehicle={vehicle}
+                        primaryColor={primaryColor}
+                        priority={index < 2}
+                        imageSizes={viewMode === "grid" ? "(max-width: 1023px) calc((100vw - 48px) / 2), (max-width: 1279px) calc((100vw - 328px) / 2), 299px" : "(max-width: 1023px) calc(100vw - 32px), 912px"}
+                      />
                     </motion.div>
                   ))}
                 </AnimatePresence>
@@ -321,7 +330,7 @@ export function VehicleListContent({
             ) : (
               <motion.div
                 key="empty-results"
-                initial={{ opacity: 0, scale: 0.99 }}
+                initial={false}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25 }}

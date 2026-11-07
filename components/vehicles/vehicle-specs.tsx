@@ -1,9 +1,7 @@
 import { Calendar, Car, DoorOpen, Fuel, Gauge, Paintbrush, Settings, Zap } from "lucide-react";
-import * as motion from "motion/react-client";
 import { Card, CardContent } from "@/components/ui/card";
-import type { Vehicle } from "@/lib/vehicles";
-import { formatMileage } from "@/lib/vehicles";
-import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
+import type { Vehicle } from "@/types/vehicle";
+import { formatMileage } from "@/lib/vehicle-format";
 
 interface VehicleSpecsProps {
   vehicle: Vehicle;
@@ -30,21 +28,16 @@ export function VehicleSpecs({ vehicle }: VehicleSpecsProps) {
   ];
 
   return (
-    <motion.div
-      data-motion-reveal=""
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="visible"
-      viewport={viewportOnce}
+    <div
     >
       <Card className="border-border bg-card">
         <CardContent className="p-5">
           <h3 className="mb-4 font-mono text-lg font-bold text-card-foreground">Ficha técnica</h3>
-          <motion.div variants={staggerContainer} className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {specs.map((spec) => {
               const Icon = spec.icon;
               return (
-                <motion.div key={spec.label} variants={fadeUp} className="flex items-start gap-3">
+                <div key={spec.label} className="flex items-start gap-3">
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
                     <Icon className="h-4 w-4 text-primary" />
                   </div>
@@ -52,12 +45,12 @@ export function VehicleSpecs({ vehicle }: VehicleSpecsProps) {
                     <p className="text-xs text-muted-foreground">{spec.label}</p>
                     <p className="text-sm font-semibold text-card-foreground">{spec.value}</p>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
-          </motion.div>
+          </div>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 }

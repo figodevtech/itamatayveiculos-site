@@ -1,7 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import * as motion from "motion/react-client";
-import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 interface Brand {
   name: string;
@@ -22,25 +20,17 @@ const popularBrands: Brand[] = [
 
 export function BrandSection() {
   return (
-    <motion.section
-      data-motion-reveal=""
+    <section
       className="mx-auto max-w-7xl px-4 py-12 lg:px-6 lg:py-16"
-      variants={staggerContainer}
-      initial="hidden"
-      whileInView="visible"
-      viewport={viewportOnce}
     >
-      <motion.h2 variants={fadeUp} className="mb-8 font-mono text-2xl font-bold text-foreground">
+      <h2 className="mb-8 font-mono text-2xl font-bold text-foreground">
         Busque por marca
-      </motion.h2>
+      </h2>
 
-      <motion.div variants={staggerContainer} className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
         {popularBrands.map((brand) => (
-          <motion.div
+          <div
             key={brand.slug}
-            variants={fadeUp}
-            whileHover={{ y: -3, scale: 1.02 }}
-            transition={{ duration: 0.2 }}
             className="h-full"
           >
             <Link
@@ -54,6 +44,7 @@ export function BrandSection() {
                     alt={brand.name}
                     width={100}
                     height={100}
+                    sizes="56px"
                     className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-[1.02]"
                   />
                 ) : (
@@ -64,9 +55,9 @@ export function BrandSection() {
                 {brand.name}
               </span>
             </Link>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
-    </motion.section>
+      </div>
+    </section>
   );
 }

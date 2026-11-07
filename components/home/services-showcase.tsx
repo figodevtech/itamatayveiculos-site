@@ -1,10 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import * as motion from "motion/react-client";
 import { Button } from "@/components/ui/button";
-import { ResponsiveReveal, Reveal } from "@/components/motion/reveal";
-import { premiumEase, viewportOnce } from "@/lib/motion";
 
 interface ShowcaseCardProps {
   eyebrow: string;
@@ -14,7 +11,6 @@ interface ShowcaseCardProps {
   imageAlt: string;
   href: string;
   cta: string;
-  direction: "left" | "right";
 }
 
 export function ServicesShowcase() {
@@ -39,7 +35,6 @@ export function ServicesShowcase() {
             imageAlt="Veículos disponíveis em uma concessionária"
             href="/veiculos/repasses"
             cta="Ver repasses"
-            direction="left"
           />
 
           {/* Card 2: Seguro Auto */}
@@ -51,7 +46,6 @@ export function ServicesShowcase() {
             imageAlt="Veículo protegido com seguro automotivo"
             href="/seguro"
             cta="Conhecer o seguro"
-            direction="right"
           />
 
           {/* Card 3: Pós-vendas */}
@@ -63,7 +57,6 @@ export function ServicesShowcase() {
             imageAlt="Profissional realizando a inspeção de um veículo"
             href="/pos-venda"
             cta="Conhecer o pós-venda"
-            direction="left"
           />
 
           {/* Card 4: Garantia */}
@@ -75,7 +68,6 @@ export function ServicesShowcase() {
             imageAlt="Entrega das chaves de um veículo ao cliente"
             href="/garantia"
             cta="Conhecer a garantia"
-            direction="right"
           />
         </div>
       </div>
@@ -91,33 +83,26 @@ function ShowcaseCard({
   imageAlt,
   href,
   cta,
-  direction,
 }: ShowcaseCardProps) {
   const minimumHeight = "min-h-[360px] sm:min-h-[400px]";
 
   return (
-    <ResponsiveReveal desktopDirection={direction} className="h-full">
+    <div className="h-full">
       <article className={`group relative h-full overflow-hidden rounded-2xl ${minimumHeight}`}>
-        <motion.div
-          data-motion-reveal=""
+        <div
           className="absolute inset-0"
-          initial={{ opacity: 0, scale: 0.99 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={viewportOnce}
-          transition={{ duration: 0.5, ease: premiumEase }}
         >
           <Image
             src={image}
             alt={imageAlt}
             fill
-            sizes="(max-width: 1023px) 100vw, 50vw"
+            sizes="(max-width: 1023px) calc(100vw - 32px), (max-width: 1279px) calc((100vw - 64px) / 2), 608px"
             className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
           />
-        </motion.div>
+        </div>
         <div className="absolute inset-0 bg-gradient-to-r from-[#102b08]/35 via-[#102b08]/10 to-transparent" />
 
-        <Reveal
-          delay={0.08}
+        <div
           className={`relative flex ${minimumHeight} flex-col items-start justify-center px-6 py-10 text-white sm:px-10 max-w-lg`}
         >
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-white/70">
@@ -137,8 +122,8 @@ function ShowcaseCard({
               <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
             </Link>
           </Button>
-        </Reveal>
+        </div>
       </article>
-    </ResponsiveReveal>
+    </div>
   );
 }

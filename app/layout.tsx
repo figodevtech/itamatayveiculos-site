@@ -4,7 +4,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { UserConfigProvider } from "@/contexts/user-config";
 import { Toaster } from "@/components/ui/sonner"
 import { MotionProvider } from "@/components/motion/motion-provider";
-import { getAppSettings } from "@/services/settings";
+import { HistoryRefresh } from "@/components/navigation/history-refresh";
 import './globals.css'
 
 const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -37,23 +37,22 @@ export const viewport: Viewport = {
   themeColor: '#1a2744',
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const settings = await getAppSettings();
-
   return (
     <html lang="pt-BR">
       <body className={`${_inter.variable} ${_spaceGrotesk.variable} font-sans antialiased`}>
         <noscript>
           <style>{`[data-motion-reveal], [style*="opacity: 0"], [style*="opacity:0"] { opacity: 1 !important; transform: none !important; }`}</style>
         </noscript>
-        <UserConfigProvider settings={settings}>
+        <UserConfigProvider settings={null}>
           <MotionProvider>{children}</MotionProvider>
         </UserConfigProvider>
         <Toaster />
+        <HistoryRefresh />
         <Analytics />
       </body>
     </html>

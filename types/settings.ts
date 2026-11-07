@@ -10,3 +10,9 @@ export interface AppSettings {
   created_at: string;
   updated_at: string;
 }
+
+/** Fields safe and necessary to serialize into the public website. */
+export type PublicAppSettings = Pick<
+  AppSettings,
+  "banner_interval" | "banner_duration" | "primary_color" | "secondary_color"
+>;

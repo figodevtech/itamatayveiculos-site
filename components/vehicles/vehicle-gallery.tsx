@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import NextImage from "next/image";
+import NextImage, { getImageProps } from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   AnimatePresence,
@@ -16,6 +16,8 @@ interface VehicleGalleryProps {
   images: string[];
   alt: string;
 }
+
+const galleryImageSizes = "(max-width: 1023px) calc(100vw - 32px), (max-width: 1279px) calc(100vw - 392px), 888px";
 
 const imageVariants: Variants = {
   enter: (direction: number) => ({
@@ -37,6 +39,7 @@ export function VehicleGallery({ images, alt }: VehicleGalleryProps) {
   const [loadedImages, setLoadedImages] = useState<Set<string>>(() => new Set());
   const thumbnailsRef = useRef<HTMLDivElement>(null);
   const displayedIndex = currentIndex < images.length ? currentIndex : 0;
+  const activeImageIsLoaded = loadedImages.has(images[displayedIndex]);
 
   const markLoaded = useCallback((src: string) => {
     setLoadedImages((loaded) => {
@@ -72,19 +75,24 @@ export function VehicleGallery({ images, alt }: VehicleGalleryProps) {
   }, [displayedIndex, shouldReduceMotion]);
 
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (images.length <= 1 || !activeImageIsLoaded) return;
 
     let cancelled = false;
-    const neighbors = [
+    const neighbors = [...new Set([
       images[(displayedIndex - 1 + images.length) % images.length],
       images[(displayedIndex + 1) % images.length],
-    ];
+    ])];
     const preloaders = neighbors.map((src) => {
       const preloader = new window.Image();
       preloader.onload = () => {
         if (!cancelled) markLoaded(src);
       };
-      preloader.src = src;
+      const { props } = getImageProps({ src, alt, fill: true, sizes: galleryImageSizes, quality: 75 });
+      preloader.decoding = "async";
+      preloader.fetchPriority = "low";
+      if (props.sizes) preloader.sizes = props.sizes;
+      if (props.srcSet) preloader.srcset = props.srcSet;
+      preloader.src = props.src;
       return preloader;
     });
 
@@ -94,14 +102,13 @@ export function VehicleGallery({ images, alt }: VehicleGalleryProps) {
         preloader.onload = null;
       });
     };
-  }, [displayedIndex, images, markLoaded]);
+  }, [activeImageIsLoaded, alt, displayedIndex, images, markLoaded]);
 
   if (images.length === 0) {
     return <div className="aspect-16/10 rounded-xl bg-muted" aria-label="Galeria sem imagens" />;
   }
 
   const activeImage = images[displayedIndex];
-  const activeImageIsLoaded = loadedImages.has(activeImage);
   const variants = shouldReduceMotion
     ? {
         enter: { opacity: 0 },
@@ -146,7 +153,7 @@ export function VehicleGallery({ images, alt }: VehicleGalleryProps) {
                 fill
                 className="object-cover"
                 priority={displayedIndex === 0}
-                sizes="(max-width: 768px) 100vw, 864px"
+                sizes={galleryImageSizes}
                 quality={75}
                 onLoad={() => markLoaded(activeImage)}
               />
@@ -230,7 +237,6 @@ export function VehicleGallery({ images, alt }: VehicleGalleryProps) {
                       fill
                       className="object-cover"
                       sizes="96px"
-                      onLoad={() => markLoaded(image)}
                     />
                     {isActive && (
                       <motion.span

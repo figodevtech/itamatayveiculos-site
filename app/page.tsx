@@ -1,37 +1,32 @@
+import { Suspense } from "react";
+import { connection } from "next/server";
 import { Header } from "@/components/header"
 import Link from "next/link"
 import { Play } from "lucide-react"
 
-export const revalidate = 0;
 import { Footer } from "@/components/footer"
 import { BannerCarousel } from "@/components/home/banner-carousel"
 import { HeroSearch } from "@/components/home/hero-search"
 import { BrandSection } from "@/components/home/brand-section"
-import { FeaturedVehicles } from "@/components/home/featured-vehicles"
+import { FeaturedVehicles, FeaturedVehiclesSkeleton } from "@/components/home/featured-vehicles"
 import { ServicesShowcase } from "@/components/home/services-showcase"
 import { BodyTypeSection } from "@/components/home/body-type-section"
 import { getBanners } from "@/services/banners";
 import { getAppSettings } from "@/services/settings";
-import { Reveal } from "@/components/motion/reveal";
+import { getVehicleFilterOptions } from "@/services/vehicles";
 
 export default async function HomePage() {
-  const [banners, settings] = await Promise.all([
-    getBanners(),
-    getAppSettings(),
-  ]);
-
+  await connection();
   return (
     <div className="flex min-h-screen flex-col ">
       <Header />
       <main className="flex-1">
-        <BannerCarousel 
-          banners={banners} 
-          interval={settings?.banner_interval}
-          duration={settings?.banner_duration}
-        />
+        <Suspense fallback={<div className="aspect-16/5 w-full animate-pulse bg-muted" aria-label="Carregando destaques" />}>
+          <HomeBanners />
+        </Suspense>
 
         {/* Mobile Shorts Banner */}
-        <Reveal className="mt-4 px-4 md:hidden" variant="scale">
+        <div className="mt-4 px-4 md:hidden">
           <Link href="/shorts" className="block w-full appearance-none outline-none">
             <div
               className="group relative flex items-center justify-between overflow-hidden rounded-2xl p-4 shadow-lg shadow-red-500/30 active:scale-95 transition-all duration-300"
@@ -55,17 +50,56 @@ export default async function HomePage() {
               </div>
             </div>
           </Link>
-        </Reveal>
+        </div>
 
-        <HeroSearch />
+        <Suspense fallback={<SearchSkeleton />}>
+          <HomeSearch />
+        </Suspense>
         <div className="mt-6">
           <BrandSection />
         </div>
-        <FeaturedVehicles />
+        <Suspense fallback={<FeaturedVehiclesSkeleton />}>
+          <FeaturedVehicles />
+        </Suspense>
         <ServicesShowcase />
-        <BodyTypeSection />
+        <Suspense fallback={<div className="mx-auto h-72 max-w-7xl animate-pulse bg-muted/30" aria-label="Carregando tipos de veículos" />}>
+          <BodyTypeSection />
+        </Suspense>
       </main>
       <Footer />
     </div>
   )
+}
+
+async function HomeBanners() {
+  const result = await Promise.all([getBanners(), getAppSettings()]).catch(error => {
+    console.error("Home banners unavailable", error);
+    return null;
+  });
+  if (!result) return <BannerCarousel banners={[]} />;
+  const [banners, settings] = result;
+  return <BannerCarousel banners={banners} interval={settings?.banner_interval} duration={settings?.banner_duration} />;
+}
+
+async function HomeSearch() {
+  await connection();
+  const options = await getVehicleFilterOptions().catch(error => {
+    console.error("Home search options unavailable", error);
+    return { brands: [] };
+  });
+  return <HeroSearch brands={options.brands} />;
+}
+
+function SearchSkeleton() {
+  return (
+    <section className="relative z-10 mx-auto mt-5 max-w-6xl px-4 lg:px-6" aria-label="Carregando busca" aria-busy="true">
+      <div className="rounded-2xl bg-card p-5 shadow-xl ring-1 ring-border/50 md:p-6">
+        <h2 className="mb-4 font-mono text-lg font-bold">Encontre seu próximo veículo</h2>
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:gap-4">
+          {[0, 1, 2, 3].map((index) => <div key={index} className="h-14 flex-1 animate-pulse rounded-md bg-muted" />)}
+        </div>
+        <div className="mt-5 h-10 border-t border-border pt-4" />
+      </div>
+    </section>
+  );
 }

@@ -1,11 +1,9 @@
 import { MessageCircle, Shield, Star } from "lucide-react";
 import Link from "next/link";
-import * as motion from "motion/react-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import type { Vehicle } from "@/lib/vehicles";
-import { formatPrice } from "@/lib/vehicles";
-import { fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
+import type { Vehicle } from "@/types/vehicle";
+import { formatPrice } from "@/lib/vehicle-format";
 
 interface ContactPanelProps {
   vehicle: Vehicle;
@@ -13,15 +11,10 @@ interface ContactPanelProps {
 
 export function ContactPanel({ vehicle }: ContactPanelProps) {
   return (
-    <motion.div
-      data-motion-reveal=""
+    <div
       className="flex flex-col gap-4"
-      variants={staggerContainer}
-      initial="hidden"
-      whileInView="visible"
-      viewport={viewportOnce}
     >
-      <motion.div variants={fadeUp}>
+      <div>
         <Card className="border-border bg-card">
           <CardContent className="p-5">
             <p className="font-mono text-3xl font-bold text-accent">
@@ -58,9 +51,9 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
             </div>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
 
-      <motion.div variants={fadeUp}>
+      <div>
         <Card className="border-border bg-card">
           <CardContent className="p-5">
             <div className="mb-4 flex items-start justify-between">
@@ -82,9 +75,9 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
             <p className="text-xs text-muted-foreground">{vehicle.city} - {vehicle.state}</p>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
 
-      <motion.div variants={fadeUp}>
+      <div>
         <Card className="border-border bg-card">
           <CardContent className="p-5">
             <h3 className="mb-4 font-semibold text-card-foreground">Simule o financiamento</h3>
@@ -99,7 +92,7 @@ export function ContactPanel({ vehicle }: ContactPanelProps) {
             </Link>
           </CardContent>
         </Card>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

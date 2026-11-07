@@ -1,5 +1,6 @@
 import { getShortsVideos } from "@/services/shorts";
 import ShortsClient from "./shorts-client";
+import { connection } from "next/server";
 
 export const metadata = {
   title: "Shorts - Veículos",
@@ -11,6 +12,7 @@ export default async function ShortsPage({
 }: {
   searchParams: Promise<{ v?: string }>;
 }) {
+  await connection();
   const params = await searchParams;
   const videos = await getShortsVideos();
 

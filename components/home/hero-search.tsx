@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Calendar, Car, DollarSign, LoaderCircle, Search } from "lucide-react";
-import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -12,8 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getBrands } from "@/lib/vehicles";
-import { fadeIn, fadeUp, staggerContainer, viewportOnce } from "@/lib/motion";
 
 const priceRanges = [
   { value: "0-80000", label: "Até R$ 80.000" },
@@ -24,23 +21,26 @@ const priceRanges = [
 
 const years = ["2025", "2024", "2023", "2022", "2021", "2020", "2019", "2018"];
 
-export function HeroSearch() {
+export function HeroSearch({ brands }: { brands: string[] }) {
   const router = useRouter();
   const [brand, setBrand] = useState("");
   const [priceRange, setPriceRange] = useState("");
   const [yearRange, setYearRange] = useState("");
-  const [brandsList, setBrandsList] = useState<string[]>([]);
   const [isPending, startTransition] = useTransition();
 
-  useEffect(() => {
-    getBrands().then(setBrandsList);
-  }, []);
 
   function handleSearch() {
     const params = new URLSearchParams();
     if (brand) params.set("marca", brand);
-    if (priceRange) params.set("preco", priceRange);
-    if (yearRange) params.set("ano", yearRange);
+    if (priceRange) {
+      const [minimum, maximum] = priceRange.split("-");
+      params.set("precoMin", minimum);
+      params.set("precoMax", maximum);
+    }
+    if (yearRange) {
+      params.set("anoMin", yearRange);
+      params.set("anoMax", yearRange);
+    }
 
     startTransition(() => {
       router.push(`/veiculos?${params.toString()}`);
@@ -48,27 +48,19 @@ export function HeroSearch() {
   }
 
   return (
-    <motion.section
-      data-motion-reveal=""
+    <section
       className="relative z-10 mx-auto mt-5 max-w-6xl px-4 lg:px-6"
-      variants={staggerContainer}
-      initial="hidden"
-      whileInView="visible"
-      viewport={viewportOnce}
     >
-      <motion.div
-        variants={fadeUp}
+      <div
         className="rounded-2xl bg-card p-5 shadow-xl ring-1 ring-border/50 md:p-6"
       >
-        <motion.h2
-          variants={fadeIn}
+        <h2
           className="mb-4 font-mono text-lg font-bold text-card-foreground"
         >
           Encontre seu próximo veículo
-        </motion.h2>
+        </h2>
 
-        <motion.form
-          variants={fadeUp}
+        <form
           className="flex flex-col gap-3 md:flex-row md:items-end md:gap-4"
           onSubmit={(event) => {
             event.preventDefault();
@@ -85,7 +77,7 @@ export function HeroSearch() {
                 <SelectValue placeholder="Todas as marcas" />
               </SelectTrigger>
               <SelectContent position="popper">
-                {brandsList.map((item) => (
+                {brands.map((item) => (
                   <SelectItem
                     className="hover:bg-primary focus:bg-primary hover:text-primary-foreground focus:text-primary-foreground"
                     key={item}
@@ -157,18 +149,17 @@ export function HeroSearch() {
             )}
             {isPending ? "Buscando..." : "Buscar"}
           </Button>
-        </motion.form>
+        </form>
 
-        <motion.div
-          variants={fadeIn}
+        <div
           className="mt-5 flex flex-wrap items-center gap-6 border-t border-border pt-4 text-muted-foreground"
         >
           <div className="flex items-center gap-2">
             <span className="font-mono font-bold text-card-foreground">500+</span>
             <span className="text-sm">vendas realizadas</span>
           </div>
-        </motion.div>
-      </motion.div>
-    </motion.section>
+        </div>
+      </div>
+    </section>
   );
 }

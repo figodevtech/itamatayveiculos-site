@@ -13,10 +13,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUserConfig } from "@/contexts/user-config";
-import { getBrands, getBodyTypes, getFuelTypes } from "@/lib/vehicles";
-import { useEffect, useState } from "react";
+import type { VehicleFilterOptions } from "@/types/vehicle";
+import { useState } from "react";
 
 interface FilterSidebarProps {
+  filterOptions: VehicleFilterOptions;
   filters: {
     brand: string;
     bodyType: string;
@@ -34,15 +35,14 @@ interface FilterSidebarProps {
 
 export function FilterSidebar({
   filters,
+  filterOptions,
   onFilterChange,
   onClearFilters,
   onClose,
   resultCount,
 }: FilterSidebarProps) {
   const { primaryColor } = useUserConfig();
-  const [brands, setBrands] = useState<string[]>([]);
-  const [bodyTypes, setBodyTypes] = useState<string[]>([]);
-  const [fuelTypes, setFuelTypes] = useState<string[]>([]);
+  const { brands, bodyTypes, fuelTypes } = filterOptions;
   const filterPriceRangeKey = filters.priceRange.join(":");
   const [draftPriceRange, setDraftPriceRange] = useState<{
     key: string;
@@ -56,17 +56,6 @@ export function FilterSidebar({
       ? draftPriceRange.value
       : filters.priceRange;
 
-  useEffect(() => {
-    Promise.all([
-      getBrands(),
-      getBodyTypes(),
-      getFuelTypes()
-    ]).then(([fetchedBrands, fetchedBodyTypes, fetchedFuelTypes]) => {
-      setBrands(fetchedBrands);
-      setBodyTypes(fetchedBodyTypes);
-      setFuelTypes(fetchedFuelTypes);
-    });
-  }, []);
 
   function handlePriceRangeChange(value: number[]) {
     setDraftPriceRange({

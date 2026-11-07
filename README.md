@@ -1,4 +1,12 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Itamatay Veículos
+
+Site em Next.js com consultas públicas no servidor, navegação progressiva e integração de publicação com o ERP.
+
+- [Carregamento, medições e ativação do cache](docs/performance.md)
+- [Testes locais de navegação e falhas](tests/README.md)
+- Configuração inicial: `.env.example`. Mantenha segredos em `.env.local` ou no ambiente de hospedagem.
+
+Validações: `npm run lint`, `npm exec tsc -- --noEmit`, `npm test` e `npm run build`. O cache compartilhado permanece desativado até validar a publicação pelo ERP.
 
 ## Getting Started
 

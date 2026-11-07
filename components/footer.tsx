@@ -1,6 +1,4 @@
 import Link from "next/link";
-import * as motion from "motion/react-client";
-import { fadeIn, fadeUp, quickStaggerContainer } from "@/lib/motion";
 
 const footerGroups = [
   {
@@ -38,20 +36,14 @@ const footerGroups = [
 
 export function Footer() {
   return (
-    <motion.footer
-      data-motion-reveal=""
+    <footer
       className="border-t border-border bg-primary text-primary-foreground"
-      variants={fadeIn}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.08 }}
     >
       <div className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
-        <motion.div
-          variants={quickStaggerContainer}
+        <div
           className="grid grid-cols-1 gap-8 md:grid-cols-4"
         >
-          <motion.div variants={fadeUp}>
+          <div>
             <Link href="/" className="mb-4 flex items-center gap-2">
               <span className="font-mono text-lg font-bold">Itamatay Veículos®</span>
             </Link>
@@ -59,10 +51,10 @@ export function Footer() {
               O maior marketplace de veículos do Brasil. Encontre o carro dos
               seus sonhos com segurança e facilidade.
             </p>
-          </motion.div>
+          </div>
 
           {footerGroups.map((group) => (
-            <motion.div key={group.title} variants={fadeUp}>
+            <div key={group.title}>
               <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider">
                 {group.title}
               </h3>
@@ -80,11 +72,11 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
-        <motion.div variants={fadeIn} className="mt-10 border-t border-primary-foreground/10 pt-6">
+        <div className="mt-10 border-t border-primary-foreground/10 pt-6">
           <p className="text-center text-xs text-primary-foreground/50">
             2026 Itamatay Veículos®. Todos os direitos reservados.
           </p>
@@ -94,8 +86,8 @@ export function Footer() {
               FIGO
             </Link>
           </p>
-        </motion.div>
+        </div>
       </div>
-    </motion.footer>
+    </footer>
   );
 }

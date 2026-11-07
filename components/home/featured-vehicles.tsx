@@ -1,82 +1,57 @@
-import type { CSSProperties } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import * as motion from "motion/react-client";
+import { connection } from "next/server";
 import { Button } from "@/components/ui/button";
-import { VehicleCard } from "@/components/vehicle-card";
-import { getFeaturedVehicles } from "@/lib/vehicles";
+import { HomeVehicleFeed } from "@/components/home/home-vehicle-feed";
+import { getHomeVehiclesPage } from "@/services/vehicles";
 import { getAppSettings } from "@/services/settings";
-import { fadeUp, staggerContainer } from "@/lib/motion";
-
-const featuredViewport = {
-  once: true,
-  // On mobile this section becomes a tall single-column list. Triggering on
-  // any intersection prevents the cards from remaining hidden while scrolling.
-  amount: "some",
-} as const;
 
 export async function FeaturedVehicles() {
-  const [vehicles, settings] = await Promise.all([
-    getFeaturedVehicles(),
-    getAppSettings(),
-  ]);
-  const primaryColorStyle = {
-    "--featured-primary": settings?.primary_color ?? "var(--primary)",
-  } as CSSProperties;
-
+  await connection();
+  const result = await Promise.all([getHomeVehiclesPage(), getAppSettings()]).catch(error => {
+    console.error("Home vehicles unavailable", error);
+    return null;
+  });
+  if (!result) return (
+    <section className="bg-secondary/50 px-4 py-12 text-center" aria-label="Veículos em destaque">
+      <h2 className="mb-3 font-mono text-2xl font-bold">Veículos em Destaque</h2>
+      <p className="text-muted-foreground">Não foi possível carregar os veículos neste momento.</p>
+      <form action="/" method="get" className="mt-4"><Button type="submit" variant="outline">Tentar novamente</Button></form>
+    </section>
+  );
+  const [page, settings] = result;
   return (
-    <motion.section
-      data-motion-reveal=""
-      className="bg-secondary/50 py-12 lg:py-16"
-      variants={staggerContainer}
-      initial="hidden"
-      whileInView="visible"
-      viewport={featuredViewport}
-    >
+    <section className="bg-secondary/50 py-12 lg:py-16" aria-labelledby="featured-vehicles-title">
       <div className="mx-auto max-w-7xl px-4 lg:px-6">
-        <motion.div variants={fadeUp} className="mb-8 flex items-end justify-between">
+        <div className="mb-8 flex items-end justify-between">
           <div>
-            <h2 className="font-mono text-2xl font-bold text-foreground">
-              Veículos em Destaque
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Veículos selecionados com os melhores preços
-            </p>
+            <h2 id="featured-vehicles-title" className="font-mono text-2xl font-bold text-foreground">Veículos em Destaque</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Veículos selecionados com os melhores preços</p>
           </div>
-          <Button
-            variant="ghost"
-            className="hidden text-primary hover:bg-[var(--featured-primary)] hover:text-white md:flex"
-            style={primaryColorStyle}
-            asChild
-          >
-            <Link href="/veiculos" className="group/link">
-              Ver todos
-              <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
-            </Link>
+          <Button variant="ghost" className="hidden md:flex" asChild>
+            <Link href="/veiculos">Ver todos <ArrowRight className="ml-1 h-4 w-4" /></Link>
           </Button>
-        </motion.div>
-
-        <motion.div variants={staggerContainer} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {vehicles.map((vehicle, index) => (
-            <motion.div key={vehicle.id} variants={fadeUp} className="h-full">
-              <VehicleCard
-                vehicle={vehicle}
-                priority={index < 2}
-                primaryColor={settings?.primary_color}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <motion.div variants={fadeUp} className="mt-6 flex justify-center md:hidden">
+        </div>
+        <HomeVehicleFeed initialPage={page} primaryColor={settings?.primary_color} />
+        <div className="mt-6 flex justify-center md:hidden">
           <Button variant="outline" asChild>
-            <Link href="/veiculos" className="group/link">
-              Ver todos os veículos
-              <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-200 group-hover/link:translate-x-1" />
-            </Link>
+            <Link href="/veiculos">Ver todos os veículos <ArrowRight className="ml-1 h-4 w-4" /></Link>
           </Button>
-        </motion.div>
+        </div>
       </div>
-    </motion.section>
+    </section>
+  );
+}
+
+export function FeaturedVehiclesSkeleton() {
+  return (
+    <section className="bg-secondary/50 py-12 lg:py-16" aria-label="Carregando veículos" aria-busy="true">
+      <div className="mx-auto max-w-7xl px-4 lg:px-6">
+        <h2 className="mb-8 font-mono text-2xl font-bold">Veículos em Destaque</h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 8 }, (_, index) => <div key={index} className="h-96 animate-pulse rounded-xl bg-muted" />)}
+        </div>
+      </div>
+    </section>
   );
 }

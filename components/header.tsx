@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { User, Heart } from "lucide-react";
-import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { MobileMenu } from "./header/mobile-menu";
@@ -40,11 +39,7 @@ export function Header() {
   }, []);
 
   return (
-    <motion.header
-      data-motion-reveal=""
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.35 }}
+    <header
       className={cn(
         "sticky top-0 z-50 w-full transition-[background-color,border-color,backdrop-filter,box-shadow] duration-300 ease-in-out",
         isScrolled
@@ -59,8 +54,9 @@ export function Header() {
           <Image
             height={50}
             width={50}
-            src="/images/logos/itamatay-logo.png"
-            alt="logo"
+            src="/images/logos/itamatay-logo-small.webp"
+            alt="Itamatay Veículos"
+            sizes="50px"
           />
           <span className="text-xl font-bold text-primary">Itamatay</span>
         </Link>
@@ -133,6 +129,6 @@ export function Header() {
           </Button>
         </div>
       </div>
-    </motion.header>
+    </header>
   );
 }

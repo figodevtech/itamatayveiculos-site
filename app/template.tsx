@@ -1,18 +1,13 @@
-"use client"
-
-import { motion } from "motion/react"
-import { ReactNode } from "react"
-import { premiumEase } from "@/lib/motion"
+import { Suspense, type ReactNode } from "react";
+import { ApplyPublicSettings } from "@/contexts/user-config";
+import { getAppSettings } from "@/services/settings";
+import { connection } from "next/server";
 
 export default function Template({ children }: { children: ReactNode }) {
-  return (
-    <motion.div
-      data-motion-reveal=""
-      initial={{ opacity: 0.92, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ ease: premiumEase, duration: 0.24 }}
-    >
-      {children}
-    </motion.div>
-  )
+  return <><Suspense fallback={null}><Settings /></Suspense>{children}</>;
+}
+
+async function Settings() {
+  await connection();
+  return <ApplyPublicSettings settings={await getAppSettings()} />;
 }
