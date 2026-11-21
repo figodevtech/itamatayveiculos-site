@@ -10,16 +10,23 @@ export interface ShortVideo {
   vehicle: Vehicle;
 }
 
+// Only shorts of vehicles currently for sale are public. `!inner` turns the embed
+// into an inner join, so the vehicle filters below drop the video rows themselves.
+const SHORT_WITH_VEHICLE = `
+  *,
+  vehicle:vehicles!inner (
+    *
+  )
+`;
+const FOR_SALE_STATUS = "Em venda";
+
 export async function getShortsVideos(): Promise<ShortVideo[]> {
   const { data, error } = await supabase
     .from("vehicle_videos")
-    .select(`
-      *,
-      vehicle:vehicles (
-        *
-      )
-    `)
+    .select(SHORT_WITH_VEHICLE)
     .eq("type", "shorts")
+    .eq("vehicle.status", FOR_SALE_STATUS)
+    .eq("vehicle.deleted", false)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -40,14 +47,11 @@ export async function getShortsVideos(): Promise<ShortVideo[]> {
 export async function getShortByVehicleId(vehicleId: string | number): Promise<ShortVideo | null> {
   const { data, error } = await supabase
     .from("vehicle_videos")
-    .select(`
-      *,
-      vehicle:vehicles (
-        *
-      )
-    `)
+    .select(SHORT_WITH_VEHICLE)
     .eq("vehicle_id", vehicleId)
     .eq("type", "shorts")
+    .eq("vehicle.status", FOR_SALE_STATUS)
+    .eq("vehicle.deleted", false)
     .single();
 
   if (error || !data) {

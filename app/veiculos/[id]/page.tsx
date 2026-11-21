@@ -5,7 +5,6 @@ import * as motion from "motion/react-client";
 import {
   ChevronRight,
   Heart,
-  Share2,
   Check,
   Star,
   Shield,
@@ -17,6 +16,7 @@ import { Footer } from "@/components/footer";
 import { VehicleGallery } from "@/components/vehicles/vehicle-gallery";
 import { VehicleSpecs } from "@/components/vehicles/vehicle-specs";
 import { ContactPanel } from "@/components/vehicles/contact-panel";
+import { ShareVehicleButton } from "@/components/vehicles/share-vehicle-button";
 import { VehicleCard } from "@/components/vehicle-card";
 import {
   getVehicleById,
@@ -239,10 +239,14 @@ export default async function VehicleDetailPage({
                 <Heart className="h-4 w-4" />
                 <span className="sr-only">Favoritar</span>
               </Button>
-              <Button variant="outline" size="icon" aria-label="Compartilhar veículo">
-                <Share2 className="h-4 w-4" />
-                <span className="sr-only">Compartilhar</span>
-              </Button>
+              <ShareVehicleButton
+                title={`${vehicle.brand} ${vehicle.model} ${vehicle.version}`}
+                text={
+                  vehicle.price > 0
+                    ? `Confira ${vehicle.brand} ${vehicle.model} ${vehicle.year}/${vehicle.yearModel} por ${formatPrice(vehicle.price)} na ${SITE_NAME}!`
+                    : `Confira ${vehicle.brand} ${vehicle.model} ${vehicle.year}/${vehicle.yearModel} na ${SITE_NAME}!`
+                }
+              />
 
               {shortVideo && (
                 <motion.div variants={fadeIn} className="ml-auto">

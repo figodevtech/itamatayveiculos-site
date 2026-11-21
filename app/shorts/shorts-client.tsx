@@ -61,22 +61,6 @@ export default function ShortsClient({ initialVideos }: { initialVideos: ShortVi
     return () => observer.disconnect();
   }, [items.length]);
 
-  // Prefetch next video
-  useEffect(() => {
-    const nextIndex = activeIndex + 1;
-    if (nextIndex < items.length) {
-      const link = document.createElement("link");
-      link.rel = "prefetch";
-      link.href = items[nextIndex].videoUrl;
-      link.as = "video";
-      document.head.appendChild(link);
-
-      return () => {
-        document.head.removeChild(link);
-      };
-    }
-  }, [activeIndex, items]);
-
   const handleLike = useCallback((id: string) => {
     setLikedItems((prev) => {
       const next = new Set(prev);

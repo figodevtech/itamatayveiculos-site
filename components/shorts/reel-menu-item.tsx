@@ -258,7 +258,9 @@ export function ReelMenuItem({
         loop
         playsInline
         autoPlay={isActive}
-        preload={isActive || isNearby ? "auto" : "metadata"}
+        // Only the active video downloads fully; neighbors fetch just the header
+        // so swiping starts fast without pulling ~3 videos per view from Storage.
+        preload={isActive ? "auto" : "metadata"}
         onContextMenu={(e) => e.preventDefault()}
         onClick={handleTap}
         aria-label={`Vídeo do veículo ${vehicleName}`}
